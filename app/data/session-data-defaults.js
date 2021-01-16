@@ -17,12 +17,5 @@ Example usage:
 
 */
 
-const fullCountryList = require('./countries.json');
-
-const fullCountryNames = Object.values(fullCountryList).map(country => country.item[0].name).sort();
-
 module.exports = {
-  fullCountryNames,
-  availableCountries: fullCountryNames,
-  countries: []
 }
