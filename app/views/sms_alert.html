@@ -1,17 +1,13 @@
 {% extends "layout.html" %}
 
-{% block beforeContent %}
-<a class="govuk-back-link" href="country">Back</a>
-{% endblock %}
-
 {% block content %}
 
 <div class="govuk-grid-row">
 	<div class="govuk-grid-column-two-thirds">
 		<h1 class="govuk-heading-xl">
-			Send an SMS emergency alert (1)
+			Send an SMS emergency alert
 		</h1>
-		<form class="form" method="post" action="sms_2">
+		<form class="form" method="post" action="sms_send_free_text">
 			<div class="govuk-form-group">
 				<label class="govuk-label" for="phoneNumber">
 					Mobile phone number
@@ -20,7 +16,14 @@
 					   type="tel" value="{{data['phoneNumber']}}">
 			</div>
 
-			<button class="govuk-button" data-module="govuk-button">Continue</button>
+			<div class="govuk-form-group">
+				<h1 class="govuk-label-wrapper"><label class="govuk-label govuk-label--l" for="message">
+					Add some text to send
+				</label>
+				</h1>
+				<textarea class="govuk-textarea" id="message" name="message" rows="5"></textarea>
+			</div>
+			<button class="govuk-button" data-module="govuk-button">Send message</button>
 		</form>
 	</div>
 </div>
