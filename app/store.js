@@ -25,7 +25,7 @@ const matchCountryName = str =>
 
 module.exports = ({phoneNumber, userMessage}) => {
   if (!map[phoneNumber]) {
-    map[phoneNumber] = blankData;
+    map[phoneNumber] = {...blankData, countries: []};
   }
   const message = userMessage.trim().toLowerCase();
 

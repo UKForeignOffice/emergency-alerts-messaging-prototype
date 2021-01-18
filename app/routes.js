@@ -17,6 +17,7 @@ router.post('/sms-received-callback', (req, res) => {
   }
   const { message, source_number } = req.body;
   const data = updateConversation({ phoneNumber: source_number, userMessage: message });
+  console.log(source_number, data);
   if (data.lastCountryRequested) {
     data.countryUrlSlug = slugify(data.lastCountryRequested)
   }
