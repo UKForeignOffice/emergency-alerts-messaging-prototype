@@ -12,10 +12,10 @@ router.post('/sms-received-callback', (req, res) => {
   if (req.headers.authorization !== BEARER_TOKEN) {
     return res.send(403);
   }
-  if (!req.session.data.message || !req.session.data.source_number) {
+  if (!req.body.message || !req.body.source_number) {
     return res.send(400);
   }
-  const { message, source_number } = req.session.data;
+  const { message, source_number } = req.body;
   const data = updateConversation({ phoneNumber: source_number, userMessage: message });
   if (data.lastCountryRequested) {
     data.countryUrlSlug = slugify(data.lastCountryRequested)
