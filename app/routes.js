@@ -24,14 +24,7 @@ router.post('/vonage-received-callback', (req, res) => {
     data.countryUrlSlug = slugify(data.lastCountryRequested)
   }
   if (data.lastTemplateSent) {
-    const options = {
-      personalisation: data
-    };
-    notify.sendSms(
-      data.lastTemplateSent,
-      number,
-      options
-    )
+    vonage.sendMessage({ number, message: 'Thank you for your interest' });
   }
   res.send(200);
 });
