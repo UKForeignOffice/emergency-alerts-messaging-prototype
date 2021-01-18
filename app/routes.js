@@ -18,7 +18,6 @@ router.post('/vonage-send-message', (req, res) => {
 router.post('/vonage-received-callback', (req, res) => {
   const { number } = req.body.from;
   const { text } = req.body.message.content;
-  console.log(number, req.body.message.content);
   const data = updateConversation({ phoneNumber: number, userMessage: text });
   if (data.lastCountryRequested) {
     data.countryUrlSlug = slugify(data.lastCountryRequested)
