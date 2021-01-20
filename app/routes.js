@@ -56,7 +56,8 @@ router.post('/vonage-received-callback', (req, res) => {
 });
 
 router.post('/vonage-status-callback', (req, res) => {
-
+  console.log(req.body);
+  res.sendStatus(200);
 });
 
 router.post('/sms-received-callback', (req, res) => {
