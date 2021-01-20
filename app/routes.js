@@ -2,7 +2,8 @@ const express = require('express')
 const router = express.Router()
 const NotifyClient = require('notifications-node-client').NotifyClient,
   notify = new NotifyClient(process.env.NOTIFYAPIKEY);
-const updateConversation = require('./store');
+const { updateConversation } = require('./store');
+const constants = require('./constants');
 const vonage = require('./vonage');
 
 const slugify = str => str.toLowerCase().replace(/ /g, '-');
@@ -18,14 +19,15 @@ router.post('/vonage-send-message', (req, res) => {
 router.post('/vonage-received-callback', (req, res) => {
   const { number } = req.body.from;
   const { text } = req.body.message.content;
-  const data = updateConversation({ phoneNumber: number, userMessage: text });
+  const data = updateConversation({ phoneNumber: number, userMessage: text, channel: constants.CHANNELS.WHATSAPP });
   if (data.lastCountryRequested) {
     data.countryUrlSlug = slugify(data.lastCountryRequested)
   }
-  if (data.lastTemplateSent) {
-    vonage.sendMessage({ number, message: 'Thank you for your interest' });
+  const { lastTemplateSent, ...rest } = data;
+  if (lastTemplateSent) {
+    vonage.sendMessage({ number, message: lastTemplateSent(rest) });
   }
-  res.send(200);
+  res.sendStatus(200);
 });
 
 router.post('/vonage-status-callback', (req, res) => {
@@ -34,14 +36,13 @@ router.post('/vonage-status-callback', (req, res) => {
 
 router.post('/sms-received-callback', (req, res) => {
   if (req.headers.authorization !== BEARER_TOKEN) {
-    return res.send(403);
+    return res.sendStatus(403);
   }
   if (!req.body.message || !req.body.source_number) {
-    return res.send(400);
+    return res.sendStatus(400);
   }
   const { message, source_number } = req.body;
-  const data = updateConversation({ phoneNumber: source_number, userMessage: message });
-  // console.log(source_number, data);
+  const data = updateConversation({ phoneNumber: source_number, userMessage: message, channel: constants.CHANNELS.SMS });
   if (data.lastCountryRequested) {
     data.countryUrlSlug = slugify(data.lastCountryRequested)
   }
@@ -55,7 +56,7 @@ router.post('/sms-received-callback', (req, res) => {
       options
     )
   }
-  res.send(200);
+  res.sendStatus(200);
 });
 
 module.exports = router
