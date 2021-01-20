@@ -47,7 +47,7 @@ module.exports = {
     }
 
     const unsubscribeRequest = message.startsWith('unsubscribe ');
-    const requestedCountryName = unsubscribeRequest ? message.split(' ')[1] : message;
+    const requestedCountryName = unsubscribeRequest ? message.replace('unsubscribe ', '') : message;
     const recognisedCountry = matchCountryName(requestedCountryName);
     if (recognisedCountry) {
       map[phoneNumber].lastCountryRequested = recognisedCountry;
