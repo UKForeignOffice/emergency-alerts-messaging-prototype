@@ -48,36 +48,37 @@ module.exports = {
         countries: map[channel][phoneNumber].countries.length ? map[channel][phoneNumber].countries : 'none'
       };
     }
-
+    const subscribeRequest = message.startsWith('subscribe ');
     const unsubscribeRequest = message.startsWith('unsubscribe ');
-    const requestedCountryName = unsubscribeRequest ? message.replace('unsubscribe ', '') : message;
-    const recognisedCountry = matchCountryName(requestedCountryName);
-    if (recognisedCountry) {
-      map[channel][phoneNumber].lastCountryRequested = recognisedCountry;
-      if (unsubscribeRequest) {
-        // unsubscribe
-        map[channel][phoneNumber].countries = map[channel][phoneNumber].countries.filter(country => country !== recognisedCountry);
-        map[channel][phoneNumber].lastTemplateSent = TEMPLATES.CONFIRM_UNSUBSCRIBED;
+    if (subscribeRequest || unsubscribeRequest) {
+      const requestedCountryName = unsubscribeRequest ? message.replace('unsubscribe ', '') : message.replace('subscribe ', '');
+      const recognisedCountry = matchCountryName(requestedCountryName);
+      if (recognisedCountry) {
+        map[channel][phoneNumber].lastCountryRequested = recognisedCountry;
+        if (unsubscribeRequest) {
+          map[channel][phoneNumber].countries = map[channel][phoneNumber].countries.filter(country => country !== recognisedCountry);
+          map[channel][phoneNumber].lastTemplateSent = TEMPLATES.CONFIRM_UNSUBSCRIBED;
+          return { ...map[channel][phoneNumber] };
+        }
+        // subscribe
+        if (map[channel][phoneNumber].isBritishNational === true) {
+          if (!map[channel][phoneNumber].countries.includes(recognisedCountry)) {
+            map[channel][phoneNumber].countries.push(recognisedCountry);
+          }
+          map[channel][phoneNumber].lastTemplateSent = TEMPLATES.CONFIRM_SUBSCRIBED;
+        } else if (map[channel][phoneNumber].isBritishNational === null) {
+          map[channel][phoneNumber].lastTemplateSent = TEMPLATES.CONFIRM_BRITISH_NATIONAL;
+        } else {
+          map[channel][phoneNumber].lastTemplateSent = TEMPLATES.DENIED_NON_BRITISH_NATIONAL;
+        }
         return { ...map[channel][phoneNumber] };
       }
-      // subscribe
-      if (map[channel][phoneNumber].isBritishNational === true) {
-        if (!map[channel][phoneNumber].countries.includes(recognisedCountry)) {
-          map[channel][phoneNumber].countries.push(recognisedCountry);
-        }
-        map[channel][phoneNumber].lastTemplateSent = TEMPLATES.CONFIRM_SUBSCRIBED;
-      } else if (map[channel][phoneNumber].isBritishNational === null) {
-        map[channel][phoneNumber].lastTemplateSent = TEMPLATES.CONFIRM_BRITISH_NATIONAL;
-      } else {
-        map[channel][phoneNumber].lastTemplateSent = TEMPLATES.DENIED_NON_BRITISH_NATIONAL;
-      }
+
+      // unrecognised country
+      map[channel][phoneNumber].lastCountryRequested = requestedCountryName;
+      map[channel][phoneNumber].lastTemplateSent = TEMPLATES.COUNTRY_NOT_RECOGNISED;
       return { ...map[channel][phoneNumber] };
     }
-
-    // unrecognised country
-    map[channel][phoneNumber].lastCountryRequested = requestedCountryName;
-    map[channel][phoneNumber].lastTemplateSent = TEMPLATES.COUNTRY_NOT_RECOGNISED;
-    return { ...map[channel][phoneNumber] };
 
     map[channel][phoneNumber].lastTemplateSent = null;
     return { ...map[channel][phoneNumber] };
