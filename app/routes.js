@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 const NotifyClient = require('notifications-node-client').NotifyClient,
   notify = new NotifyClient(process.env.NOTIFYAPIKEY);
-const { updateConversation } = require('./store');
+const { updateConversation, getSubscribersForCountry } = require('./store');
 const constants = require('./constants');
 const vonage = require('./vonage');
 
@@ -10,10 +10,35 @@ const slugify = str => str.toLowerCase().replace(/ /g, '-');
 
 const BEARER_TOKEN = 'Bearer 0123456789';
 
-router.post('/vonage-send-message', (req, res) => {
-  const { number, message } = req.body;
-  vonage.sendMessage({ number, message });
-  res.send(200);
+router.get('/', (req, res, next) => {
+  req.session.data = {};
+  next();
+});
+
+router.post('/broadcast-alert', (req, res) => {
+  const { country, message } = req.body;
+  const subscribers = getSubscribersForCountry({ country });
+  subscribers.forEach(({ number, channel }) => {
+    if (channel === constants.CHANNELS.SMS) {
+      notify.sendSms(
+        'baccbf59-9f54-4f69-a914-ad84e5cc181a',
+        number,
+        {
+          personalisation: {
+            message
+          }
+        }
+      )
+      return;
+    }
+    if (channel === constants.CHANNELS.WHATSAPP) {
+      vonage.sendMessage({ number, message })
+    }
+  });
+  req.session.data['country'] = country;
+  req.session.data['subscribers'] = subscribers;
+  req.session.data['message'] = message;
+  res.redirect('/broadcast-confirmation');
 });
 
 router.post('/vonage-received-callback', (req, res) => {

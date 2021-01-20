@@ -1,0 +1,52 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<div class="govuk-grid-row">
+	<div class="govuk-grid-column-two-thirds">
+		<h1 class="govuk-heading-xl">
+			Send an emergency alert
+		</h1>
+		<p>This will send an alert to all users who subscribed to alerts for the country you specify.</p>
+		<p>Each user will be alerted via the channel they subscribed on - SMS or WhatsApp (or both).</p>
+		<br /><hr /><br />
+		<form class="form" method="post" action="broadcast-alert">
+			<div class="govuk-form-group">
+				<label class="govuk-label" for="countryToAdd">
+					Type or select a country
+				</label>
+				<select class="govuk-select" id="countryToAdd" name="country">
+					<option value=""></option>
+					{% for country in data['countryNames'] %}
+					<option value="{{country}}">{{country}}</option>
+					{% endfor %}
+				</select>
+				<div id="my-autocomplete-container"></div>
+			</div>
+
+			<div class="govuk-form-group">
+				<h1 class="govuk-label-wrapper"><label class="govuk-label govuk-label--l" for="message">
+					Alert text
+				</label>
+				</h1>
+				<textarea class="govuk-textarea" id="message" name="message" rows="5"></textarea>
+			</div>
+			<button class="govuk-button" data-module="govuk-button">Send message</button>
+		</form>
+	</div>
+</div>
+<link rel="stylesheet" href="/public/javascripts/accessible-autocomplete.min.css" />
+<script type="text/javascript" src="/public/javascripts/accessible-autocomplete.min.js"></script>
+<script>
+  accessibleAutocomplete.enhanceSelectElement({
+    defaultValue: '',
+    selectElement: document.querySelector('#countryToAdd'),
+    showAllValues: true,
+    displayMenu: 'overlay'
+  });
+  document.querySelector('.autocomplete__dropdown-arrow-down').addEventListener('click', function() {
+    document.querySelector('#countryToAdd').click();
+    document.querySelector('#countryToAdd').focus();
+  })
+</script>
+{% endblock %}

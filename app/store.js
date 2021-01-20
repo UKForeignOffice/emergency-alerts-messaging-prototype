@@ -2,7 +2,10 @@ const recognisedCountryList = require('./data/countries.json');
 const recognisedCountryNames = Object.values(recognisedCountryList).map(recognisedCountry => recognisedCountry.item[0].name).sort();
 const getTemplates = require('./message-templates');
 
-const map = {};
+const map = {
+  SMS: {},
+  WHATSAPP: {}
+};
 
 const blankData = {
   countries: [],
@@ -17,32 +20,32 @@ const matchCountryName = str =>
 module.exports = {
   updateConversation: ({ phoneNumber, userMessage, channel }) => {
     const TEMPLATES = getTemplates({ channel });
-    if (!map[phoneNumber]) {
-      map[phoneNumber] = { ...blankData, countries: [] };
+    if (!map[channel][phoneNumber]) {
+      map[channel][phoneNumber] = { ...blankData, countries: [] };
     }
     const message = userMessage.trim().toLowerCase();
 
-    if (message === 'yes' && map[phoneNumber].isBritishNational === null && map[phoneNumber].lastTemplateSent === TEMPLATES.CONFIRM_BRITISH_NATIONAL && map[phoneNumber].lastCountryRequested) {
-      if (!map[phoneNumber].countries.includes(map[phoneNumber].lastCountryRequested)) {
-        map[phoneNumber].countries.push(map[phoneNumber].lastCountryRequested);
+    if (message === 'yes' && map[channel][phoneNumber].isBritishNational === null && map[channel][phoneNumber].lastTemplateSent === TEMPLATES.CONFIRM_BRITISH_NATIONAL && map[channel][phoneNumber].lastCountryRequested) {
+      if (!map[channel][phoneNumber].countries.includes(map[channel][phoneNumber].lastCountryRequested)) {
+        map[channel][phoneNumber].countries.push(map[channel][phoneNumber].lastCountryRequested);
       }
-      map[phoneNumber].isBritishNational = true;
-      map[phoneNumber].lastTemplateSent = TEMPLATES.CONFIRM_SUBSCRIBED;
-      return { ...map[phoneNumber] };
+      map[channel][phoneNumber].isBritishNational = true;
+      map[channel][phoneNumber].lastTemplateSent = TEMPLATES.CONFIRM_SUBSCRIBED;
+      return { ...map[channel][phoneNumber] };
     }
 
-    if (message === 'no' && map[phoneNumber].isBritishNational === null && map[phoneNumber].lastTemplateSent === TEMPLATES.CONFIRM_BRITISH_NATIONAL) {
-      map[phoneNumber].isBritishNational = false;
-      map[phoneNumber].lastTemplateSent = TEMPLATES.DENIED_NON_BRITISH_NATIONAL;
-      return { ...map[phoneNumber] };
+    if (message === 'no' && map[channel][phoneNumber].isBritishNational === null && map[channel][phoneNumber].lastTemplateSent === TEMPLATES.CONFIRM_BRITISH_NATIONAL) {
+      map[channel][phoneNumber].isBritishNational = false;
+      map[channel][phoneNumber].lastTemplateSent = TEMPLATES.DENIED_NON_BRITISH_NATIONAL;
+      return { ...map[channel][phoneNumber] };
     }
 
     // list all subscribed countries
     if (message === 'subscribe list') {
-      map[phoneNumber].lastTemplateSent = TEMPLATES.LIST_SUBSCRIBED_COUNTRIES;
+      map[channel][phoneNumber].lastTemplateSent = TEMPLATES.LIST_SUBSCRIBED_COUNTRIES;
       return {
-        ...map[phoneNumber],
-        countries: map[phoneNumber].countries.length ? map[phoneNumber].countries : 'none'
+        ...map[channel][phoneNumber],
+        countries: map[channel][phoneNumber].countries.length ? map[channel][phoneNumber].countries : 'none'
       };
     }
 
@@ -50,33 +53,40 @@ module.exports = {
     const requestedCountryName = unsubscribeRequest ? message.replace('unsubscribe ', '') : message;
     const recognisedCountry = matchCountryName(requestedCountryName);
     if (recognisedCountry) {
-      map[phoneNumber].lastCountryRequested = recognisedCountry;
+      map[channel][phoneNumber].lastCountryRequested = recognisedCountry;
       if (unsubscribeRequest) {
         // unsubscribe
-        map[phoneNumber].countries = map[phoneNumber].countries.filter(country => country !== recognisedCountry);
-        map[phoneNumber].lastTemplateSent = TEMPLATES.CONFIRM_UNSUBSCRIBED;
-        return { ...map[phoneNumber] };
+        map[channel][phoneNumber].countries = map[channel][phoneNumber].countries.filter(country => country !== recognisedCountry);
+        map[channel][phoneNumber].lastTemplateSent = TEMPLATES.CONFIRM_UNSUBSCRIBED;
+        return { ...map[channel][phoneNumber] };
       }
       // subscribe
-      if (map[phoneNumber].isBritishNational === true) {
-        if (!map[phoneNumber].countries.includes(recognisedCountry)) {
-          map[phoneNumber].countries.push(recognisedCountry);
+      if (map[channel][phoneNumber].isBritishNational === true) {
+        if (!map[channel][phoneNumber].countries.includes(recognisedCountry)) {
+          map[channel][phoneNumber].countries.push(recognisedCountry);
         }
-        map[phoneNumber].lastTemplateSent = TEMPLATES.CONFIRM_SUBSCRIBED;
-      } else if (map[phoneNumber].isBritishNational === null) {
-        map[phoneNumber].lastTemplateSent = TEMPLATES.CONFIRM_BRITISH_NATIONAL;
+        map[channel][phoneNumber].lastTemplateSent = TEMPLATES.CONFIRM_SUBSCRIBED;
+      } else if (map[channel][phoneNumber].isBritishNational === null) {
+        map[channel][phoneNumber].lastTemplateSent = TEMPLATES.CONFIRM_BRITISH_NATIONAL;
       } else {
-        map[phoneNumber].lastTemplateSent = TEMPLATES.DENIED_NON_BRITISH_NATIONAL;
+        map[channel][phoneNumber].lastTemplateSent = TEMPLATES.DENIED_NON_BRITISH_NATIONAL;
       }
-      return { ...map[phoneNumber] };
+      return { ...map[channel][phoneNumber] };
     }
 
     // unrecognised country
-    map[phoneNumber].lastCountryRequested = requestedCountryName;
-    map[phoneNumber].lastTemplateSent = TEMPLATES.COUNTRY_NOT_RECOGNISED;
-    return { ...map[phoneNumber] };
+    map[channel][phoneNumber].lastCountryRequested = requestedCountryName;
+    map[channel][phoneNumber].lastTemplateSent = TEMPLATES.COUNTRY_NOT_RECOGNISED;
+    return { ...map[channel][phoneNumber] };
 
-    map[phoneNumber].lastTemplateSent = null;
-    return { ...map[phoneNumber] };
+    map[channel][phoneNumber].lastTemplateSent = null;
+    return { ...map[channel][phoneNumber] };
+  },
+  getSubscribersForCountry: ({ country }) => {
+    const forChannel = channel =>
+      Object.keys(map[channel]).map(number =>
+        map[channel][number].countries.includes(country) ? { number, channel } : null
+      ).filter(Boolean);
+    return [...forChannel('SMS'), ...forChannel('WHATSAPP')];
   }
 }

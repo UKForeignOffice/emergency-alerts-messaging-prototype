@@ -1,0 +1,54 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<div class="govuk-grid-row">
+	<div class="govuk-grid-column-two-thirds">
+		<h1 class="govuk-heading-xl">
+			Alert sent
+		</h1>
+		<table class="govuk-table">
+			<tbody class="govuk-table__body">
+			<tr class="govuk-table__row">
+				<th scope="row" class="govuk-table__header">Country</th>
+				<td class="govuk-table__cell">{{ data['country'] }}</td>
+			</tr>
+			<tr class="govuk-table__row">
+				<th scope="row" class="govuk-table__header">Recipients</th>
+
+				<td class="govuk-table__cell">
+					{% if data['subscribers'] and data['subscribers'].length %}
+					{% for subscriber in data['subscribers'] %}
+					{{subscriber.number}} ({{subscriber.channel}})<br />
+					{% endfor %}
+					{% else %}
+					No subscribers
+					{% endif %}
+				</td>
+
+			</tr>
+			<tr class="govuk-table__row">
+				<th scope="row" class="govuk-table__header">Alert message</th>
+				<td class="govuk-table__cell">{{ data['message'] | escape | nl2br }}</td>
+			</tr>
+			</tbody>
+		</table>
+
+		<a href="/" class="govuk-back-link">Send another</a>
+	</div>
+</div>
+<link rel="stylesheet" href="/public/javascripts/accessible-autocomplete.min.css" />
+<script type="text/javascript" src="/public/javascripts/accessible-autocomplete.min.js"></script>
+<script>
+  accessibleAutocomplete.enhanceSelectElement({
+    defaultValue: '',
+    selectElement: document.querySelector('#countryToAdd'),
+    showAllValues: true,
+    displayMenu: 'overlay'
+  });
+  document.querySelector('.autocomplete__dropdown-arrow-down').addEventListener('click', function() {
+    document.querySelector('#countryToAdd').click();
+    document.querySelector('#countryToAdd').focus();
+  })
+</script>
+{% endblock %}
