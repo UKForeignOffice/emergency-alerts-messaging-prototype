@@ -1,5 +1,5 @@
 module.exports = ({ countries }) => `
-You are currently subscribed to UK Government alerts for the following countries: ${countries}.
+You are currently subscribed to UK Government alerts for the following countries: ${Array.isArray(countries) ? countries.join(', ') : countries}.
 
 To subscribe to alerts for a country, reply with SUBSCRIBE followed by a space and then the country name.
 
