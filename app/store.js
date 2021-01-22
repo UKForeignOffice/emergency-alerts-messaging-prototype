@@ -1,6 +1,7 @@
 const recognisedCountryList = require('./data/countries.json');
 const recognisedCountryNames = Object.values(recognisedCountryList).map(recognisedCountry => recognisedCountry.item[0].name).sort();
 const getTemplates = require('./message-templates');
+const constants = require('./constants');
 
 const map = {
   SMS: {},
@@ -49,9 +50,19 @@ module.exports = {
       };
     }
     const subscribeRequest = message.startsWith('subscribe ');
+    const smsSubscribeFromWhatsApp = message.startsWith('sms ');
     const unsubscribeRequest = message.startsWith('unsubscribe ');
-    if (subscribeRequest || unsubscribeRequest) {
-      const requestedCountryName = unsubscribeRequest ? message.replace('unsubscribe ', '') : message.replace('subscribe ', '');
+    if (subscribeRequest || smsSubscribeFromWhatsApp || unsubscribeRequest) {
+      let requestedCountryName;
+      if (subscribeRequest) {
+        requestedCountryName = message.replace('subscribe ', '');
+      }
+      if (smsSubscribeFromWhatsApp) {
+        requestedCountryName = message.replace('sms ', '');
+      }
+      if (unsubscribeRequest) {
+        requestedCountryName = message.replace('unsubscribe ', '');
+      }
       const recognisedCountry = matchCountryName(requestedCountryName);
       if (recognisedCountry) {
         map[channel][phoneNumber].lastCountryRequested = recognisedCountry;
@@ -60,16 +71,25 @@ module.exports = {
           map[channel][phoneNumber].lastTemplateSent = TEMPLATES.CONFIRM_UNSUBSCRIBED;
           return { ...map[channel][phoneNumber] };
         }
+        // subscribe to SMS from whatsapp
+        if (smsSubscribeFromWhatsApp) {
+          map[channel][phoneNumber].lastTemplateSent = TEMPLATES.CONFIRM_SUBSCRIBED_SMS;
+          // the user will have already confirmed they're a British National via WhatsApp
+          map[constants.CHANNELS.SMS][phoneNumber] = map[constants.CHANNELS.SMS][phoneNumber] || {...blankData};
+          map[constants.CHANNELS.SMS][phoneNumber].isBritishNational = true;
+        }
         // subscribe
-        if (map[channel][phoneNumber].isBritishNational === true) {
-          if (!map[channel][phoneNumber].countries.includes(recognisedCountry)) {
-            map[channel][phoneNumber].countries.push(recognisedCountry);
+        if (subscribeRequest) {
+          if (map[channel][phoneNumber].isBritishNational === true) {
+            if (!map[channel][phoneNumber].countries.includes(recognisedCountry)) {
+              map[channel][phoneNumber].countries.push(recognisedCountry);
+            }
+            map[channel][phoneNumber].lastTemplateSent = TEMPLATES.CONFIRM_SUBSCRIBED;
+          } else if (map[channel][phoneNumber].isBritishNational === null) {
+            map[channel][phoneNumber].lastTemplateSent = TEMPLATES.CONFIRM_BRITISH_NATIONAL;
+          } else {
+            map[channel][phoneNumber].lastTemplateSent = TEMPLATES.DENIED_NON_BRITISH_NATIONAL;
           }
-          map[channel][phoneNumber].lastTemplateSent = TEMPLATES.CONFIRM_SUBSCRIBED;
-        } else if (map[channel][phoneNumber].isBritishNational === null) {
-          map[channel][phoneNumber].lastTemplateSent = TEMPLATES.CONFIRM_BRITISH_NATIONAL;
-        } else {
-          map[channel][phoneNumber].lastTemplateSent = TEMPLATES.DENIED_NON_BRITISH_NATIONAL;
         }
         return { ...map[channel][phoneNumber] };
       }

@@ -12,6 +12,7 @@ const NOTIFY_TEMPLATE_IDS = {
 const WHATSAPP_TEMPLATES = {
   CONFIRM_BRITISH_NATIONAL: require('./confirm-british-national'),
   CONFIRM_SUBSCRIBED: require('./subscribe-confirmation'),
+  CONFIRM_SUBSCRIBED_SMS: require('./subscribe-confirmation-sms'),
   DENIED_NON_BRITISH_NATIONAL: require('./not-british-national'),
   COUNTRY_NOT_RECOGNISED: require('./country-not-recognised'),
   CONFIRM_UNSUBSCRIBED: require('./unsubscribe-confirmation'),

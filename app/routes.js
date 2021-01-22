@@ -15,6 +15,22 @@ router.get('/', (req, res, next) => {
   next();
 });
 
+const sendNotifySms = ({ data, phoneNumber }) => {
+  if (data.lastCountryRequested) {
+    data.countryUrlSlug = slugify(data.lastCountryRequested)
+  }
+  if (data.lastTemplateSent) {
+    const options = {
+      personalisation: data
+    };
+    notify.sendSms(
+      data.lastTemplateSent,
+      phoneNumber,
+      options
+    )
+  }
+};
+
 router.post('/broadcast-alert', (req, res) => {
   const { country, message } = req.body;
   const subscribers = getSubscribersForCountry({ country });
@@ -44,13 +60,19 @@ router.post('/broadcast-alert', (req, res) => {
 router.post('/vonage-received-callback', (req, res) => {
   const { number } = req.body.from;
   const { text } = req.body.message.content;
-  const data = updateConversation({ phoneNumber: number, userMessage: text, channel: constants.CHANNELS.WHATSAPP });
+  let data = updateConversation({ phoneNumber: number, userMessage: text, channel: constants.CHANNELS.WHATSAPP });
   if (data.lastCountryRequested) {
-    data.countryUrlSlug = slugify(data.lastCountryRequested)
+    data.countryUrlSlug = slugify(data.lastCountryRequested);
   }
   const { lastTemplateSent, ...rest } = data;
   if (lastTemplateSent) {
     vonage.sendMessage({ number, message: lastTemplateSent(rest) });
+  }
+  const smsSubscribeRequest = text.startsWith('sms ');
+  if (smsSubscribeRequest) {
+    const userMessage = text.replace('sms ', 'subscribe ');
+    data = updateConversation({ phoneNumber: number, userMessage, channel: constants.CHANNELS.SMS });
+    sendNotifySms({ data, phoneNumber: number });
   }
   res.sendStatus(200);
 });
@@ -69,19 +91,7 @@ router.post('/sms-received-callback', (req, res) => {
   }
   const { message, source_number } = req.body;
   const data = updateConversation({ phoneNumber: source_number, userMessage: message, channel: constants.CHANNELS.SMS });
-  if (data.lastCountryRequested) {
-    data.countryUrlSlug = slugify(data.lastCountryRequested)
-  }
-  if (data.lastTemplateSent) {
-    const options = {
-      personalisation: data
-    };
-    notify.sendSms(
-      data.lastTemplateSent,
-      source_number,
-      options
-    )
-  }
+  sendNotifySms({ data, phoneNumber: source_number });
   res.sendStatus(200);
 });
 
