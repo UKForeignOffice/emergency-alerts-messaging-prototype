@@ -70,7 +70,7 @@ router.post('/vonage-received-callback', (req, res) => {
     console.log(`WhatsApp sent to ***${number.slice(-3)}`);
     vonage.sendMessage({ number, message: lastTemplateSent(rest) });
   }
-  const smsSubscribeRequest = text.startsWith('sms ');
+  const smsSubscribeRequest = text.trim().toLowerCase().startsWith('sms ');
   if (smsSubscribeRequest) {
     const userMessage = text.replace('sms ', 'subscribe ');
     data = updateConversation({ phoneNumber: number, userMessage, channel: constants.CHANNELS.SMS });
