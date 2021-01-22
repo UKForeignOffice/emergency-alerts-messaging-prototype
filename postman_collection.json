@@ -1,0 +1,129 @@
+{
+	"info": {
+		"_postman_id": "b5312180-8648-408c-9e2c-aa8edac1ed8b",
+		"name": "FCDO messaging prototype",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "http://localhost:3000/sms-received-callback",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "0123456789",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "authorization",
+						"value": "",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"message\": \"subscribe france\",\"source_number\": \"{{PHONE_NUMBER}}\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/sms-received-callback",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"sms-received-callback"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:3000/vonage-received-callback",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "0123456789",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "authorization",
+						"value": "",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"message\": { \"content\": { \"text\": \"subscribe france\" } }, \"from\": { \"number\": \"447947619361\"} }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/vonage-received-callback",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"vonage-received-callback"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "fda9ddeb-aa7b-46a9-8cc7-151ecccab367",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "df99b1ae-77a2-42f1-bbb2-e8814d763c72",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "ce7fa35c-9bf5-4c43-b0a4-5d7957bf16ab",
+			"key": "PHONE_NUMBER",
+			"value": ""
+		}
+	],
+	"protocolProfileBehavior": {}
+}
