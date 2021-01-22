@@ -23,6 +23,7 @@ const sendNotifySms = ({ data, phoneNumber }) => {
     const options = {
       personalisation: data
     };
+    console.log(`Notify SMS sent to ***${phoneNumber.slice(-3)}`);
     notify.sendSms(
       data.lastTemplateSent,
       phoneNumber,
@@ -66,6 +67,7 @@ router.post('/vonage-received-callback', (req, res) => {
   }
   const { lastTemplateSent, ...rest } = data;
   if (lastTemplateSent) {
+    console.log(`WhatsApp sent to ***${number.slice(-3)}`);
     vonage.sendMessage({ number, message: lastTemplateSent(rest) });
   }
   const smsSubscribeRequest = text.startsWith('sms ');
@@ -78,7 +80,6 @@ router.post('/vonage-received-callback', (req, res) => {
 });
 
 router.post('/vonage-status-callback', (req, res) => {
-  console.log(req.body);
   res.sendStatus(200);
 });
 
