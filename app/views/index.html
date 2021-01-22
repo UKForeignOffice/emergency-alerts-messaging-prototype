@@ -7,16 +7,14 @@
 		<h1 class="govuk-heading-xl">
 			Send an emergency alert
 		</h1>
-		<p>This will send an alert to all users who subscribed to alerts for the country you specify.</p>
-		<p>Each user will be alerted via the channel they subscribed on - SMS or WhatsApp (or both).</p>
-		<br /><hr /><br />
+		<p>This will send an alert to all users who subscribed to alerts for the country you specify. Each user will be alerted via the channel(s) they subscribed on - SMS or WhatsApp (or both).</p>
+		<br />
 		<form class="form" method="post" action="broadcast-alert">
 			<div class="govuk-form-group">
-				<label class="govuk-label" for="countryToAdd">
-					Type or select a country
+				<label class="govuk-label govuk-label--s" for="countryToAdd">
+					Country to send the alert for
 				</label>
 				<select class="govuk-select" id="countryToAdd" name="country">
-					<option value=""></option>
 					{% for country in data['countryNames'] %}
 					<option value="{{country}}">{{country}}</option>
 					{% endfor %}
@@ -25,13 +23,33 @@
 			</div>
 
 			<div class="govuk-form-group">
-				<h1 class="govuk-label-wrapper"><label class="govuk-label govuk-label--l" for="message">
+				<label class="govuk-label govuk-label--s" for="message">
 					Alert text
 				</label>
-				</h1>
-				<textarea class="govuk-textarea" id="message" name="message" rows="5"></textarea>
+				<textarea class="govuk-textarea" id="message" name="message" rows="25">
+EMERGENCY ALERT FROM THE FOREIGN, COMMONWEALTH AND DEVELOPMENT OFFICE
+
+An armed conflict has broken out in Syria, at the border with Turkey.
+
+WHAT TO DO
+You are advised to:
+- leave the area immediately
+- do not visit this area if you are near it
+- contact your family and friends to let them know you are ok
+- find a safe place, if you are unable to leave
+
+A list of local hotels that are still open can be found at XXX
+
+GETTING HOME
+If you would like to return to the UK, a repatriation flight is being arranged. Check GOV.UK Travel Advice for details: https://www.gov.uk/foreign-travel-advice/syria
+
+URGENT HELP
+If you need urgent help from the UK Government, you can contact your local embassy on 66 (0) 2 305 8333
+
+To unsubscribe from Emergency Alerts reply to this message with UNSUBSCRIBE SYRIA
+				</textarea>
 			</div>
-			<button class="govuk-button" data-module="govuk-button">Send message</button>
+			<button class="govuk-button" data-module="govuk-button">Send alert to all subscribers</button>
 		</form>
 	</div>
 </div>
@@ -39,7 +57,7 @@
 <script type="text/javascript" src="/public/javascripts/accessible-autocomplete.min.js"></script>
 <script>
   accessibleAutocomplete.enhanceSelectElement({
-    defaultValue: '',
+    defaultValue: 'Type a country name',
     selectElement: document.querySelector('#countryToAdd'),
     showAllValues: true,
     displayMenu: 'overlay'
