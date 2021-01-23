@@ -109,6 +109,6 @@ module.exports = {
       Object.keys(map[channel]).map(number =>
         map[channel][number].countries.includes(country) ? { number, channel } : null
       ).filter(Boolean);
-    return [...forChannel('SMS'), ...forChannel('WHATSAPP')];
+    return [...forChannel(constants.CHANNELS.SMS), ...forChannel(constants.CHANNELS.WHATSAPP), ...forChannel(constants.CHANNELS.VIBER)];
   }
 }
