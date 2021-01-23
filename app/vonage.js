@@ -1,4 +1,5 @@
 const Vonage = require('@vonage/server-sdk')
+const constants = require('./constants');
 
 const vonage = new Vonage({
   apiKey: process.env.VONAGE_API_KEY,
@@ -9,10 +10,13 @@ const vonage = new Vonage({
   apiHost: process.env.VONAGE_BASE_URL
 })
 
-const sendMessage = ({ number, message }) => {
+const sendMessage = ({ number, message, channel }) => {
+  const type = channel === constants.CHANNELS.WHATSAPP ? 'whatsapp' : 'viber_service_msg';
+  const secondParam = channel === constants.CHANNELS.WHATSAPP ? { type, number: process.env.VONAGE_WHATSAPP_NUMBER } :
+    { type: "viber_service_msg", id: process.env.VIBER_SERVICE_MESSAGE_ID };
   vonage.channel.send(
-    { "type": "whatsapp", "number": number },
-    { "type": "whatsapp", "number": process.env.VONAGE_WHATSAPP_NUMBER },
+    { type, number },
+    secondParam,
     {
       "content": {
         "type": "text",

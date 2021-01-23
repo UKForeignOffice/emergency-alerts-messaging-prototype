@@ -9,7 +9,7 @@ const NOTIFY_TEMPLATE_IDS = {
   LIST_SUBSCRIBED_COUNTRIES: 'ee8faa0f-5d2f-42fd-beed-0ca6ec584dba'
 };
 
-const WHATSAPP_TEMPLATES = {
+const STRING_TEMPLATES = {
   CONFIRM_BRITISH_NATIONAL: require('./confirm-british-national'),
   CONFIRM_SUBSCRIBED: require('./subscribe-confirmation'),
   CONFIRM_SUBSCRIBED_SMS: require('./subscribe-confirmation-sms'),
@@ -23,7 +23,5 @@ module.exports = ({ channel }) => {
   if (channel === constants.CHANNELS.SMS) {
     return NOTIFY_TEMPLATE_IDS;
   }
-  if (channel === constants.CHANNELS.WHATSAPP) {
-    return WHATSAPP_TEMPLATES;
-  }
+  return STRING_TEMPLATES;
 }

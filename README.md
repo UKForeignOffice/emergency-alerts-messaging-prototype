@@ -18,7 +18,7 @@ The app / service will run locally on http://localhost:3000
 
 ## Using the API locally
 
-To use WhatsApp, register your phone number by following these [instructions](https://docs.google.com/document/d/1SakVPPP8Yt8fLPSPj4t6j5ucW6ENL6x0/edit#heading=h.du842k3jz8je).
+To use WhatsApp or Viber, register your phone number by following these [instructions](https://docs.google.com/document/d/1SakVPPP8Yt8fLPSPj4t6j5ucW6ENL6x0/edit#heading=h.du842k3jz8je).
 
 You can use Postman to send requests to 
 Load `./postman_collection.json` into Postman, to send requests to localhost.

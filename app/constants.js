@@ -1,7 +1,8 @@
 
 const CHANNELS = {
   SMS: 'SMS',
-  WHATSAPP: 'WHATSAPP'
+  WHATSAPP: 'WHATSAPP',
+  VIBER: 'VIBER'
 }
 
 module.exports = {

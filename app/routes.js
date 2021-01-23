@@ -48,9 +48,8 @@ router.post('/broadcast-alert', (req, res) => {
       )
       return;
     }
-    if (channel === constants.CHANNELS.WHATSAPP) {
-      vonage.sendMessage({ number, message })
-    }
+    // whatsapp / viber
+    vonage.sendMessage({ number, message, channel })
   });
   req.session.data['country'] = country;
   req.session.data['subscribers'] = subscribers;
@@ -59,16 +58,17 @@ router.post('/broadcast-alert', (req, res) => {
 });
 
 router.post('/vonage-received-callback', (req, res) => {
-  const { number } = req.body.from;
+  const { number, type } = req.body.from;
   const { text } = req.body.message.content;
-  let data = updateConversation({ phoneNumber: number, userMessage: text, channel: constants.CHANNELS.WHATSAPP });
+  const channel = type === 'whatsapp' ? constants.CHANNELS.WHATSAPP : constants.CHANNELS.VIBER;
+  let data = updateConversation({ phoneNumber: number, userMessage: text, channel });
   if (data.lastCountryRequested) {
     data.countryUrlSlug = slugify(data.lastCountryRequested);
   }
   const { lastTemplateSent, ...rest } = data;
   if (lastTemplateSent) {
-    console.log(`WhatsApp sent to ***${number.slice(-3)}`);
-    vonage.sendMessage({ number, message: lastTemplateSent(rest) });
+    console.log(`${channel} message sent to ***${number.slice(-3)}`);
+    vonage.sendMessage({ number, message: lastTemplateSent(rest), channel });
   }
   const lowerCase = text.trim().toLowerCase();
   const smsSubscribeRequest = lowerCase.startsWith('sms ');

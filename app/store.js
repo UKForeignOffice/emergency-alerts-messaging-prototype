@@ -5,7 +5,8 @@ const constants = require('./constants');
 
 const map = {
   SMS: {},
-  WHATSAPP: {}
+  WHATSAPP: {},
+  VIBER: {}
 };
 
 const blankData = {
