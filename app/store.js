@@ -4,6 +4,7 @@ const getTemplates = require('./message-templates');
 const constants = require('./constants');
 
 const map = {
+  EMAIL: {},
   SMS: {},
   WHATSAPP: {},
   VIBER: {}
@@ -20,6 +21,10 @@ const matchCountryName = str =>
   recognisedCountryNames.find(recognisedCountry => recognisedCountry.toLowerCase() === str);
 
 module.exports = {
+  instantSubscribe: ({ senderId, countries, channel }) => {
+    map[channel][senderId] = map[channel][senderId] || {...blankData, isBritishNational: true};
+    map[channel][senderId].countries = Array.from(new Set([...map[channel][senderId].countries, ...countries]));
+  },
   updateConversation: ({ phoneNumber, userMessage, channel }) => {
     const TEMPLATES = getTemplates({ channel });
     if (!map[channel][phoneNumber]) {
@@ -106,9 +111,12 @@ module.exports = {
   },
   getSubscribersForCountry: ({ country }) => {
     const forChannel = channel =>
-      Object.keys(map[channel]).map(number =>
-        map[channel][number].countries.includes(country) ? { number, channel } : null
+      Object.keys(map[channel]).map(senderId =>
+        map[channel][senderId].countries.includes(country) ? { senderId, channel } : null
       ).filter(Boolean);
-    return [...forChannel(constants.CHANNELS.SMS), ...forChannel(constants.CHANNELS.WHATSAPP), ...forChannel(constants.CHANNELS.VIBER)];
+    return Object
+      .values(constants.CHANNELS)
+      .reduce((subscribers, channel) =>
+        [...subscribers, ...forChannel(channel)], [])
   }
 }

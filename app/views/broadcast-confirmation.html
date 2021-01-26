@@ -19,7 +19,7 @@
 				<td class="govuk-table__cell">
 					{% if data['subscribers'] and data['subscribers'].length %}
 					{% for subscriber in data['subscribers'] %}
-					{{subscriber.number}} ({{subscriber.channel}})<br />
+					{{subscriber.senderId}} ({{subscriber.channel}})<br />
 					{% endfor %}
 					{% else %}
 					No subscribers

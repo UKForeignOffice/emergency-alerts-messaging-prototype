@@ -2,18 +2,14 @@ const express = require('express')
 const router = express.Router()
 const NotifyClient = require('notifications-node-client').NotifyClient,
   notify = new NotifyClient(process.env.NOTIFYAPIKEY);
-const { updateConversation, getSubscribersForCountry } = require('./store');
+const { updateConversation, getSubscribersForCountry, instantSubscribe } = require('./store');
 const constants = require('./constants');
 const vonage = require('./vonage');
 
 const slugify = str => str.toLowerCase().replace(/ /g, '-');
 
-const BEARER_TOKEN = 'Bearer 0123456789';
+const BEARER_TOKEN = `Bearer ${process.env.BEARER_TOKEN}`;
 
-router.get('/', (req, res, next) => {
-  req.session.data = {};
-  next();
-});
 
 const sendNotifySms = ({ data, phoneNumber }) => {
   if (data.lastCountryRequested) {
@@ -35,11 +31,11 @@ const sendNotifySms = ({ data, phoneNumber }) => {
 router.post('/broadcast-alert', (req, res) => {
   const { country, message } = req.body;
   const subscribers = getSubscribersForCountry({ country });
-  subscribers.forEach(({ number, channel }) => {
+  subscribers.forEach(({ senderId, channel }) => {
     if (channel === constants.CHANNELS.SMS) {
       notify.sendSms(
         'baccbf59-9f54-4f69-a914-ad84e5cc181a',
-        number,
+        senderId,
         {
           personalisation: {
             message
@@ -48,8 +44,21 @@ router.post('/broadcast-alert', (req, res) => {
       )
       return;
     }
+    if (channel === constants.CHANNELS.EMAIL) {
+      notify.sendEmail(
+        '211b0b04-b04c-4289-b8b7-cf903b70f61a',
+        senderId,
+        {
+          personalisation: {
+            message,
+            country
+          }
+        }
+      )
+      return;
+    }
     // whatsapp / viber
-    vonage.sendMessage({ number, message, channel })
+    vonage.sendMessage({ number: senderId, message, channel })
   });
   req.session.data['country'] = country;
   req.session.data['subscribers'] = subscribers;
@@ -95,6 +104,27 @@ router.post('/sms-received-callback', (req, res) => {
   const data = updateConversation({ phoneNumber: source_number, userMessage: message, channel: constants.CHANNELS.SMS });
   sendNotifySms({ data, phoneNumber: source_number });
   res.sendStatus(200);
+});
+
+router.post('/subscriptions', (req, res) => {
+  if (req.headers.authorization !== BEARER_TOKEN) {
+    return res.sendStatus(403);
+  }
+  if (!req.body.senderId || !req.body.countries || !req.body.channel) {
+    return res.sendStatus(400);
+  }
+  const { senderId, countries, channel } = req.body;
+  instantSubscribe({ senderId, countries, channel });
+  res.sendStatus(201);
+});
+
+// HTML pages
+
+router.use(require('../lib/middleware/authentication/authentication.js'));
+
+router.get('/', (req, res, next) => {
+  req.session.data = {};
+  next();
 });
 
 module.exports = router
