@@ -41,7 +41,7 @@ router.post('/broadcast-alert', (req, res) => {
             message
           }
         }
-      )
+      ).catch(err => console.log(err))
       return;
     }
     if (channel === constants.CHANNELS.EMAIL) {
@@ -54,7 +54,7 @@ router.post('/broadcast-alert', (req, res) => {
             country
           }
         }
-      )
+      ).catch(err => console.log(err))
       return;
     }
     // whatsapp / viber
