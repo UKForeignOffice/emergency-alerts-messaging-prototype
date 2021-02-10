@@ -5,11 +5,11 @@ const NotifyClient = require('notifications-node-client').NotifyClient,
 const { updateConversation, getSubscribersForCountry, instantSubscribe } = require('./store');
 const constants = require('./constants');
 const vonage = require('./vonage');
+const { saveToCrm, getAlerts } = require('./save-to-crm');
 
 const slugify = str => str.toLowerCase().replace(/ /g, '-');
 
 const BEARER_TOKEN = `Bearer ${process.env.BEARER_TOKEN}`;
-
 
 const sendNotifySms = ({ data, phoneNumber }) => {
   if (data.lastCountryRequested) {
@@ -55,6 +55,7 @@ router.post('/broadcast-alert', (req, res) => {
           }
         }
       ).catch(err => console.log(err))
+      saveToCrm({ emailAddress: senderId, country, message, channel: constants.CHANNELS.EMAIL })
       return;
     }
     // whatsapp / viber
@@ -65,6 +66,11 @@ router.post('/broadcast-alert', (req, res) => {
   req.session.data['message'] = message;
   res.redirect('/broadcast-confirmation');
 });
+
+router.get('/alerts', async(req, res) => {
+  const alerts = await getAlerts();
+  res.json(alerts);
+})
 
 router.post('/vonage-received-callback', (req, res) => {
   const { number, type } = req.body.from;
