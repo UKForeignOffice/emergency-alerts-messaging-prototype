@@ -41,7 +41,7 @@ module.exports = {
       }
 
       const country = await dynamicsWebApi.retrieveRequest({
-        filter: `cap_name eq '${data.country}'`,
+        filter: `cap_name eq '${data.country === 'Myanmar' ? 'Myanmar (Burma) travel advice team' : data.country}'`,
         collection: 'cap_locations',
         select: ['cap_locationid']
       })
@@ -64,8 +64,14 @@ module.exports = {
       return null
     }
   },
-  getAlerts: async () => {
+  getAlerts: async (countryName) => {
+    const country = await dynamicsWebApi.retrieveRequest({
+      filter: `cap_name eq '${countryName === 'Myanmar' ? 'Myanmar (Burma) travel advice team' : countryName}'`,
+      collection: 'cap_locations',
+      select: ['cap_locationid', 'cap_name']
+    })
     const alerts = await dynamicsWebApi.retrieveRequest({
+      filter: `_fco_country_value eq '${country.value[0].cap_locationid}'`,
       collection: 'fco_emergencyalerts',
       select: ['_fco_contact_value', '_fco_country_value', 'fco_messagetext', 'fco_dateandtime', 'fco_channel']
     })
@@ -81,6 +87,7 @@ module.exports = {
       return results.map((result, idx) => {
         const { fco_messagetext, fco_dateandtime, fco_channel  } = alerts.value[idx]
         return {
+          country: country.value[0].cap_name,
           emailAddress: result.value.value[0].emailaddress1,
           fco_messagetext,
           fco_dateandtime,

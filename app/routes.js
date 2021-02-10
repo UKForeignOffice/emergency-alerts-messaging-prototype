@@ -68,7 +68,7 @@ router.post('/broadcast-alert', (req, res) => {
 });
 
 router.get('/alerts', async(req, res) => {
-  const alerts = await getAlerts();
+  const alerts = await getAlerts(req.query.country);
   res.json(alerts);
 })
 
