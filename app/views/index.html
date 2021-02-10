@@ -26,7 +26,10 @@
 				<label class="govuk-label govuk-label--s" for="message">
 					Alert text
 				</label>
-				<textarea class="govuk-textarea" id="message" name="message" rows="25">
+				<div id="more-detail-hint" class="govuk-hint">
+					Note - the message must be 918 characters or less to be delivered to any SMS subscribers
+				</div>
+				<textarea class="govuk-textarea" id="message" name="message" rows="25" aria-describedby="more-detail-hint">
 EMERGENCY ALERT FROM THE FOREIGN, COMMONWEALTH AND DEVELOPMENT OFFICE
 
 The Myanmar Military have declared a state of emergency and assumed control of the country.
