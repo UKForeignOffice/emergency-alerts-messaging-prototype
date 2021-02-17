@@ -1,0 +1,44 @@
+.timeline {
+
+  border-left: 3px solid govuk-colour("blue");
+  margin: 0;
+  padding: 0;
+
+  &-event {
+    @include govuk-responsive-padding(6, "bottom");
+    padding-left: govuk-spacing(4);
+    position: relative;
+    list-style: none;
+
+    &:last-child {
+      padding-bottom: 0;
+    }
+
+  }
+
+  &-event-title {
+    @include govuk-responsive-margin(1, "bottom");
+    @extend %govuk-heading-m;
+
+    &:before {
+      background-color: govuk-colour("blue");
+      content: "";
+      height: 3px;
+      left: 0;
+      top: .5em;
+      position: absolute;
+      width: govuk-spacing(4) * 0.6;
+    }
+  }
+
+  &-event-meta {
+    display: block;
+  }
+
+  &-event-meta {
+    @include govuk-font($size: 19);
+    @include govuk-text-colour;
+    @include govuk-responsive-margin(3, "bottom");
+  }
+
+}

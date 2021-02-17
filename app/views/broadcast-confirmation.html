@@ -27,14 +27,11 @@
 				</td>
 
 			</tr>
-			<tr class="govuk-table__row">
-				<th scope="row" class="govuk-table__header">Alert message</th>
-				<td class="govuk-table__cell">{{ data['message'] | escape | nl2br }}</td>
-			</tr>
 			</tbody>
 		</table>
 
-		<a href="/" class="govuk-back-link">Send another</a>
+		<p><a href="/alert-history?sort=desc" class="govuk-back-link">View all alerts for this incident</a></p>
+		<p><a href="/" class="govuk-back-link">Send another</a></p>
 	</div>
 </div>
 <link rel="stylesheet" href="/public/javascripts/accessible-autocomplete.min.css" />

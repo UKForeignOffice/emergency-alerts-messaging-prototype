@@ -7,14 +7,16 @@
 		<h1 class="govuk-heading-xl">
 			Send an emergency alert
 		</h1>
-		<p>This will send an alert to all users who subscribed to alerts for the country you specify. Each user will be alerted via the channel(s) they subscribed on - SMS, WhatsApp & Viber.</p>
+		<p>This will send an alert to all users who subscribed to alerts for the country you specify. Each user will be
+			alerted via the channel(s) they subscribed on (email / SMS / WhatsApp).</p>
 		<br />
 		<form class="form" method="post" action="broadcast-alert">
 			<div class="govuk-form-group">
-				<label class="govuk-label govuk-label--s" for="countryToAdd">
+				<label class="govuk-label" for="countryToAdd">
 					Country to send the alert for
 				</label>
 				<select class="govuk-select" id="countryToAdd" name="country">
+					<option value="" selected>Type a country name</option>
 					{% for country in data['countryNames'] %}
 					<option value="{{country}}">{{country}}</option>
 					{% endfor %}
@@ -22,35 +24,71 @@
 				<div id="my-autocomplete-container"></div>
 			</div>
 
+
 			<div class="govuk-form-group">
-				<label class="govuk-label govuk-label--s" for="message">
-					Alert text
+				<label class="govuk-label" for="heading">
+					Message heading
 				</label>
-				<div id="more-detail-hint" class="govuk-hint">
-					Note - the message must be 918 characters or less to be delivered to any SMS subscribers
-				</div>
-				<textarea class="govuk-textarea" id="message" name="message" rows="25" aria-describedby="more-detail-hint">
-EMERGENCY ALERT FROM THE FOREIGN, COMMONWEALTH AND DEVELOPMENT OFFICE
-
-The Myanmar Military have declared a state of emergency and assumed control of the country.
-
-The Foreign, Commonwealth & Development Office (FCDO) advises against all but essential travel across Myanmar.
-
-There may be disruption to internet, phone networks and ATMs.
-
-WHAT TO DO
-You are advised to stay home and stay safe.
-
-If you need to collect essential provisions, you should do so quickly and avoiding crowds. There is a nationwide curfew imposed between midnight and 4am.
-
-If you’re in Myanmar and need urgent help (for example, you’ve been attacked, arrested or someone has died), call +95 (01) 370863 or +95 (01) 370864
-
-Check GOV.UK Travel advice: https://www.gov.uk/foreign-travel-advice/myanmar
-
-To unsubscribe, reply to this message with UNSUBSCRIBE myanmar
-
-				</textarea>
+				<input class="govuk-input" id="heading" name="messageHeading" value="Flights out of Myanmar" />
 			</div>
+
+			<div class="govuk-accordion" data-module="govuk-accordion" id="accordion-default">
+				<div class="govuk-accordion__section ">
+					<div class="govuk-accordion__section-header">
+						<h2 class="govuk-accordion__section-heading">
+        <span class="govuk-accordion__section-button" id="accordion-default-heading-2">
+          Email message
+        </span>
+						</h2>
+					</div>
+					<div id="accordion-default-content-2" class="govuk-accordion__section-content"
+						 aria-labelledby="accordion-default-heading-2">
+
+							<textarea class="govuk-textarea" id="email-body" name="messageEmail" rows="25"
+									  aria-describedby="more-detail-hint">
+# What to do
+
+If you have concerns for your safety in the current situation, you should consider leaving Myanmar by commercial means. The military have suspended all scheduled international commercial passenger flights until 31 May 2021.
+
+However, we understand that some services will be available. Land borders are also closed.
+
+There are limited options for British nationals looking to return to the UK.
+
+We understand that a number of flights are resuming to Kuala Lumpur, Seoul, and Singapore, although these may be subject to change and travellers should contact the relevant airline’s website or office.
+
+These are primarily operated by Myanmar Airways International - https://maiair.com/
+
+All travellers should check with the embassies of respective transit countries to check transit, entry and Covid-19 testing requirements before making ticket purchases.
+
+Please be aware of current UK entry requirements. To enter the UK, you are required to:
+
+1. complete a passenger locator form; and
+2. provide proof of a negative coronavirus test.
+							</textarea>
+
+					</div>
+				</div>
+				<div class="govuk-accordion__section ">
+					<div class="govuk-accordion__section-header">
+						<h2 class="govuk-accordion__section-heading">
+        <span class="govuk-accordion__section-button" id="accordion-default-heading-1">
+          SMS message
+        </span>
+						</h2>
+					</div>
+					<div id="accordion-default-content-1" class="govuk-accordion__section-content"
+						 aria-labelledby="accordion-default-heading-1">
+						<div id="more-detail-hint" class="govuk-hint">
+							Note - the SMS message must be 918 characters or less
+						</div>
+						<textarea class="govuk-textarea" name="messageSms" rows="25"
+								  aria-describedby="more-detail-hint"></textarea>
+
+					</div>
+				</div>
+			</div>
+
+
 			<button class="govuk-button" data-module="govuk-button">Send alert to all subscribers</button>
 		</form>
 	</div>
@@ -63,10 +101,10 @@ To unsubscribe, reply to this message with UNSUBSCRIBE myanmar
     selectElement: document.querySelector('#countryToAdd'),
     showAllValues: true,
     displayMenu: 'overlay'
-  });
-  document.querySelector('.autocomplete__dropdown-arrow-down').addEventListener('click', function() {
-    document.querySelector('#countryToAdd').click();
-    document.querySelector('#countryToAdd').focus();
+  })
+  document.querySelector('.autocomplete__dropdown-arrow-down').addEventListener('click', function () {
+    document.querySelector('#countryToAdd').click()
+    document.querySelector('#countryToAdd').focus()
   })
 </script>
 {% endblock %}
