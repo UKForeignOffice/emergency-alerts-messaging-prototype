@@ -77,6 +77,7 @@ module.exports = {
     })
     return Promise.allSettled(
       alerts.value.map(async alert =>
+      //   dynamicsWebApi.deleteRequest({ key: alert.fco_emergencyalertid, collection: 'fco_emergencyalerts' })
         dynamicsWebApi.retrieveRequest({
           filter: `contactid eq '${alert._fco_contact_value}'`,
           collection: 'contacts',
