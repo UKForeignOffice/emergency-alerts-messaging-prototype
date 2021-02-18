@@ -14,18 +14,28 @@
 				<td class="govuk-table__cell">{{ data['country'] }}</td>
 			</tr>
 			<tr class="govuk-table__row">
-				<th scope="row" class="govuk-table__header">Recipients</th>
-
+				<th scope="row" class="govuk-table__header">Successful deliveries</th>
 				<td class="govuk-table__cell">
-					{% if data['subscribers'] and data['subscribers'].length %}
-					{% for subscriber in data['subscribers'] %}
+					{% if data['succeeded'] and data['succeeded'].length %}
+					{% for subscriber in data['succeeded'] %}
 					{{subscriber.senderId}} ({{subscriber.channel}})<br />
 					{% endfor %}
 					{% else %}
-					No subscribers
+					None
 					{% endif %}
 				</td>
-
+			</tr>
+			<tr class="govuk-table__row">
+				<th scope="row" class="govuk-table__header">Failed deliveries</th>
+				<td class="govuk-table__cell">
+					{% if data['failed'] and data['failed'].length %}
+					{% for subscriber in data['failed'] %}
+					{{subscriber.senderId}} ({{subscriber.channel}})<br />
+					{% endfor %}
+					{% else %}
+					None
+					{% endif %}
+				</td>
 			</tr>
 			</tbody>
 		</table>

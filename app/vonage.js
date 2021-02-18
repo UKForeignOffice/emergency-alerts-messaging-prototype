@@ -10,27 +10,29 @@ const vonage = new Vonage({
   apiHost: process.env.VONAGE_BASE_URL
 })
 
-const sendMessage = ({ number, message, channel }) => {
+const sendMessage = ({ senderId, message, channel }) => {
   const type = channel === constants.CHANNELS.WHATSAPP ? 'whatsapp' : 'viber_service_msg';
   const secondParam = channel === constants.CHANNELS.WHATSAPP ? { type, number: process.env.VONAGE_WHATSAPP_NUMBER } :
     { type: "viber_service_msg", id: process.env.VIBER_SERVICE_MESSAGE_ID };
-  vonage.channel.send(
-    { type, number },
-    secondParam,
-    {
-      "content": {
-        "type": "text",
-        "text": message
+  return new Promise((resolve, reject) => {
+    vonage.channel.send(
+      { type, number: senderId },
+      secondParam,
+      {
+        "content": {
+          "type": "text",
+          "text": message
+        }
+      },
+      (err, data) => {
+        if (err) {
+          reject(err)
+        } else {
+          resolve({ senderId, channel });
+        }
       }
-    },
-    (err, data) => {
-      if (err) {
-        console.error(err);
-      } else {
-        console.log(data.message_uuid);
-      }
-    }
-  );
+    );
+  });
 }
 
 module.exports = {
