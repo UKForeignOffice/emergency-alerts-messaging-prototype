@@ -1,5 +1,5 @@
 module.exports = {
-  title: 'Military coup',
+  title: 'military coup',
   startDate: '1st Feb 2021',
   alerts: [
     {
