@@ -37,10 +37,10 @@ If you’re in the UK and worried about a British national in Myanmar, call 020 
   `,
       sms: `If you’re in Myanmar and you need urgent help (for example, you’ve been attacked, arrested or someone has died), use one of the following numbers:
 
-* +95 (01) 370863
-* +95 (01) 370864
-* +95 (01) 370865
-* +95 (01) 370867
++95 (01) 370863
++95 (01) 370864
++95 (01) 370865
++95 (01) 370867
 
 Please be aware that there may be disruptions to phone networks.
 
@@ -79,11 +79,11 @@ The Embassy cannot provide further information or advice about departure options
 
 You should check with the embassies of respective transit countries to check transit, entry and Covid-19 testing requirements.
 
-* From 3 Feb Myanmar Airways International will fly from Yangon to Kuala Lumpur three times a week.
+From 3 Feb Myanmar Airways International will fly from Yangon to Kuala Lumpur three times a week.
 
-* From 5 February Myanmar Airways International will operate a weekly service from Yangon to Seoul Incheon airport. A COVID-19 negative test result is required to join this flight.
+From 5 February Myanmar Airways International will operate a weekly service from Yangon to Seoul Incheon airport. A COVID-19 negative test result is required to join this flight.
 
-* From 5 February Singapore Airlines (SIA) will operate a weekly service to Singapore Changi airport. Transit is permitted for those joining flights to a range of destinations using SIA services. But this does not include the UK. No-one with a travel history to the UK in the preceding 14 days will be allowed to transit or enter Singapore. A COVID-19 negative test result is required to join this flight
+From 5 February Singapore Airlines (SIA) will operate a weekly service to Singapore Changi airport. Transit is permitted for those joining flights to a range of destinations using SIA services. But this does not include the UK. No-one with a travel history to the UK in the preceding 14 days will be allowed to transit or enter Singapore. A COVID-19 negative test result is required to join this flight
 `
     },
     {
