@@ -5,10 +5,10 @@
 <div class="govuk-grid-row">
 	<div class="govuk-grid-column-two-thirds">
 		<h1 class="govuk-heading-xl">
-			Send an emergency alert
+			Send a travel alert
 		</h1>
 		<p>This will send an alert to all users who subscribed to alerts for the country you specify. Each user will be
-			alerted via the channel(s) they subscribed on (email / SMS / WhatsApp).</p>
+			alerted via the channel(s) they subscribed on (email / SMS).</p>
 		<br />
 		<form class="form" method="post" action="broadcast-alert">
 			<div class="govuk-form-group">
@@ -24,7 +24,7 @@
 				<div id="my-autocomplete-container"></div>
 			</div>
 
-
+			<h2 class="govuk-heading-m">Ongoing incident: Military coup</h2>
 			<div class="govuk-form-group">
 				<label class="govuk-label" for="heading">
 					Message heading
@@ -46,7 +46,7 @@
 
 							<textarea class="govuk-textarea" id="email-body" name="messageEmail" rows="25"
 									  aria-describedby="more-detail-hint">
-# What to do
+# Flights out of Myanmar
 
 If you have concerns for your safety in the current situation, you should consider leaving Myanmar by commercial means. The military have suspended all scheduled international commercial passenger flights until 31 May 2021.
 
@@ -57,6 +57,8 @@ There are limited options for British nationals looking to return to the UK.
 We understand that a number of flights are resuming to Kuala Lumpur, Seoul, and Singapore, although these may be subject to change and travellers should contact the relevant airline’s website or office.
 
 These are primarily operated by Myanmar Airways International - https://maiair.com/
+
+# Transit / entry requirements
 
 All travellers should check with the embassies of respective transit countries to check transit, entry and Covid-19 testing requirements before making ticket purchases.
 
@@ -82,7 +84,22 @@ Please be aware of current UK entry requirements. To enter the UK, you are requi
 							Note - the SMS message must be 918 characters or less
 						</div>
 						<textarea class="govuk-textarea" name="messageSms" rows="25"
-								  aria-describedby="more-detail-hint"></textarea>
+								  aria-describedby="more-detail-hint">
+FLIGHTS OUT OF MYANMAR
+
+The military have suspended all scheduled international commercial passenger flights until 31 May 2021. Land borders are also closed.
+
+We understand that a number of flights, mainly with Myanmar Airways International - https://maiair.com/ are resuming to Kuala Lumpur, Seoul, and Singapore, although these may be subject to change and travellers should contact the relevant airline’s website or office.
+
+TRANSIT / ENTRY REQUIREMENTS
+
+Check with the embassies of respective transit countries on entry and Covid-19 testing requirements before making ticket purchases.
+
+Please be aware of current UK entry requirements:
+
+1. complete a passenger locator form; and
+2. provide proof of a negative coronavirus test.
+						</textarea>
 
 					</div>
 				</div>
@@ -97,7 +114,7 @@ Please be aware of current UK entry requirements. To enter the UK, you are requi
 <script type="text/javascript" src="/public/javascripts/accessible-autocomplete.min.js"></script>
 <script>
   accessibleAutocomplete.enhanceSelectElement({
-    defaultValue: 'Type a country name',
+    defaultValue: 'Myanmar (Burma)',
     selectElement: document.querySelector('#countryToAdd'),
     showAllValues: true,
     displayMenu: 'overlay'
