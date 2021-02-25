@@ -7,5 +7,6 @@ const CHANNELS = {
 }
 
 module.exports = {
-  CHANNELS
+  CHANNELS,
+  BEARER_TOKEN: `Bearer ${process.env.BEARER_TOKEN}`
 }

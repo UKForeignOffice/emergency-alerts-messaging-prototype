@@ -64,7 +64,8 @@ module.exports = {
       return null
     }
   },
-  getAlerts: async (countryName) => {
+  getAlerts: async (req, res) => {
+    const countryName = req.query.country;
     const country = await dynamicsWebApi.retrieveRequest({
       filter: `cap_name eq '${countryName === 'Myanmar' ? 'Myanmar (Burma) travel advice team' : countryName}'`,
       collection: 'cap_locations',
@@ -75,9 +76,9 @@ module.exports = {
       collection: 'fco_emergencyalerts',
       select: ['_fco_contact_value', '_fco_country_value', 'fco_messagetext', 'fco_dateandtime', 'fco_channel']
     })
-    return Promise.allSettled(
+    const response = await Promise.allSettled(
       alerts.value.map(async alert =>
-      //   dynamicsWebApi.deleteRequest({ key: alert.fco_emergencyalertid, collection: 'fco_emergencyalerts' })
+        //   dynamicsWebApi.deleteRequest({ key: alert.fco_emergencyalertid, collection: 'fco_emergencyalerts' })
         dynamicsWebApi.retrieveRequest({
           filter: `contactid eq '${alert._fco_contact_value}'`,
           collection: 'contacts',
@@ -96,5 +97,7 @@ module.exports = {
         }
       })
     })
+
+    res.json(response)
   }
 }
