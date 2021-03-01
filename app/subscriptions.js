@@ -1,8 +1,17 @@
 
-const { instantSubscribe } = require('./store')
+const { instantSubscribe, getSubscribersForCountry } = require('./store')
 const { BEARER_TOKEN } = require('./constants')
 
 module.exports = {
+  getSubscriptions: (req, res) => {
+    if (req.headers.authorization !== BEARER_TOKEN) {
+      return res.sendStatus(403)
+    }
+    if (!req.query.country) {
+      return res.sendStatus(400)
+    }
+    res.json(getSubscribersForCountry({ country: req.query.country }))
+  },
   addSubscription: (req, res) => {
     if (req.headers.authorization !== BEARER_TOKEN) {
       return res.sendStatus(403)

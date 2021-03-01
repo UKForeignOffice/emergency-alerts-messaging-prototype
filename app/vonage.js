@@ -28,6 +28,7 @@ const sendMessage = ({ senderId, message, channel }) => {
       },
       (err, data) => {
         if (err) {
+          console.error(err);
           reject(err)
         } else {
           resolve({ senderId, channel });

@@ -8,5 +8,7 @@ const CHANNELS = {
 
 module.exports = {
   CHANNELS,
-  BEARER_TOKEN: `Bearer ${process.env.BEARER_TOKEN}`
+  BEARER_TOKEN: `Bearer ${process.env.BEARER_TOKEN}`,
+  NOTIFY_TEMPLATE_ID_EMAIL: '211b0b04-b04c-4289-b8b7-cf903b70f61a',
+  NOTIFY_TEMPLATE_ID_SMS: 'baccbf59-9f54-4f69-a914-ad84e5cc181a'
 }

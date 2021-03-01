@@ -1,6 +1,6 @@
-module.exports = ({ countryUrlSlug, title, body }) => `
+module.exports = ({ countryUrlSlug, messageHeading, body }) => `
 
-# ${title}
+# ${messageHeading}
 
 ${body}
 

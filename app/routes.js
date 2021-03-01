@@ -5,7 +5,8 @@ const crm = require('./save-to-crm')
 const broadcastAlert = require('./broadcast-alert')
 const sms = require('./sms')
 const { alertHistory } = require('./alert-history')
-const { addSubscription } = require('./add-subscription')
+const { addSubscription, getSubscriptions } = require('./subscriptions')
+const confirmSenderId = require('./confirm-sender-id')
 
 router.get('/alert-history', alertHistory)
 
@@ -21,6 +22,9 @@ router.post('/vonage-status-callback', vonage.statusCallback)
 router.post('/sms-received-callback', sms.messageReceived)
 
 router.post('/subscriptions', addSubscription)
+router.get('/subscriptions', getSubscriptions)
+
+router.post('/confirm-sender-id', confirmSenderId)
 
 // HTML pages
 

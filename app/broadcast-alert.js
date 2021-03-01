@@ -1,9 +1,10 @@
-const makeEmailMessage = require('./message-templates/alerts/email');
+const makeEmailAlert = require('./message-templates/email/alert');
 const notify = require('./notify')
 const { getSubscribersForCountry } = require('./store')
 const constants = require('./constants')
 const { slugify } = require('./utils');
 const vonage = require('./vonage')
+const { NOTIFY_TEMPLATE_ID_EMAIL, NOTIFY_TEMPLATE_ID_SMS } = require('./constants')
 
 module.exports = async (req, res) => {
   const { country, messageHeading, messageEmail, messageSms } = req.body
@@ -20,25 +21,25 @@ module.exports = async (req, res) => {
     subscribers.map(({ senderId, channel }) => {
       if (channel === constants.CHANNELS.SMS) {
         return notify.sendSms(
-          'baccbf59-9f54-4f69-a914-ad84e5cc181a',
+          NOTIFY_TEMPLATE_ID_SMS,
           senderId,
           {
             personalisation: {
-              message: messageSms
+              body: messageSms
             }
           }
         )
       }
       if (channel === constants.CHANNELS.EMAIL) {
         const countryUrlSlug = slugify(country);
-        const email = makeEmailMessage({ countryUrlSlug, body: messageEmail, title: messageHeading })
+        const email = makeEmailAlert({ countryUrlSlug, body: messageEmail, messageHeading })
         return notify.sendEmail(
-          '211b0b04-b04c-4289-b8b7-cf903b70f61a',
+          NOTIFY_TEMPLATE_ID_EMAIL,
           senderId,
           {
             personalisation: {
-              message: email,
-              country
+              subject: `FCDO Travel Alert for ${country}`,
+              body: email
             }
           }
         )

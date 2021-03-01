@@ -1,27 +1,23 @@
 const constants = require('./constants');
 const { updateConversation } = require('./store')
-const { slugify } = require('./utils');
 const { BEARER_TOKEN } = require('./constants')
 const notify = require('./notify')
+const { NOTIFY_TEMPLATE_ID_SMS } = require('./constants')
 
-const sendNotifySms = ({ data, phoneNumber }) => {
-  if (data.lastCountryRequested) {
-    data.countryUrlSlug = slugify(data.lastCountryRequested)
-  }
-  if (data.lastTemplateSent) {
-    const options = {
-      personalisation: data
+const sendNotifySms = async ({ data, phoneNumber }) => {
+  await notify.sendSms(
+    NOTIFY_TEMPLATE_ID_SMS,
+    phoneNumber,
+    {
+      personalisation: {
+        body: data.renderedTemplate
+      }
     }
-    console.log(`Notify SMS sent to ***${phoneNumber.slice(-3)}`)
-    notify.sendSms(
-      data.lastTemplateSent,
-      phoneNumber,
-      options
-    )
-  }
+  )
+  console.log(`Notify SMS sent to ***${phoneNumber.slice(-3)} with template ${data.lastTemplateSent}`)
 }
 
-const messageReceived = (req, res) => {
+const messageReceived = async (req, res) => {
   if (req.headers.authorization !== BEARER_TOKEN) {
     return res.sendStatus(403)
   }
@@ -34,7 +30,10 @@ const messageReceived = (req, res) => {
     userMessage: message,
     channel: constants.CHANNELS.SMS
   })
-  sendNotifySms({ data, phoneNumber: source_number })
+
+  if (data.lastTemplateSent) {
+    await sendNotifySms({ data, phoneNumber: source_number })
+  }
   res.sendStatus(200)
 }
 
