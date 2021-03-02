@@ -5,9 +5,10 @@ const constants = require('./constants')
 const { slugify } = require('./utils');
 const vonage = require('./vonage')
 const { NOTIFY_TEMPLATE_ID_EMAIL, NOTIFY_TEMPLATE_ID_SMS } = require('./constants')
+const { sendTweet } = require('./twitter')
 
 module.exports = async (req, res) => {
-  const { country, messageHeading, messageEmail, messageSms } = req.body
+  const { country, messageHeading, messageEmail, messageSms, messageWhatsApp, messageTwitter1, messageTwitter2, messageTwitter3 } = req.body
   const subscribers = getSubscribersForCountry({ country })
 
   req.session.data.incident.alerts.push({
@@ -46,9 +47,12 @@ module.exports = async (req, res) => {
         // saveToCrm({ emailAddress: senderId, country, message: messageEmail, channel: constants.CHANNELS.EMAIL })
       }
       // whatsapp / viber
-      return vonage.sendMessage({ senderId, message: messageSms, channel })
+      if (channel === constants.CHANNELS.WHATSAPP) {
+        return vonage.sendMessage({ senderId, message: messageWhatsApp, channel })
+      }
     })
   );
+  await sendTweet({ messages: [messageTwitter1, messageTwitter2, messageTwitter3] })
   req.session.data['country'] = country
   req.session.data['succeeded'] = [];
   req.session.data['failed'] = [];
