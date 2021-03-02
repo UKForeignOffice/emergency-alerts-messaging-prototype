@@ -10,7 +10,6 @@ const client = new Twitter({
 module.exports = {
   sendTweet: async ({ messages }) => {
     let lastTweetID = ''
-    let results
     for (const status of messages) {
       try {
         const tweet = await client.post('statuses/update', {
@@ -19,16 +18,9 @@ module.exports = {
           auto_populate_reply_metadata: true
         })
         lastTweetID = tweet.id_str
-        results.push()
       } catch (err) {
         console.error(err)
-        result = false
-        break
       }
     }
-    if (result === false) {
-      return result
-    }
-    return true
   }
 }
