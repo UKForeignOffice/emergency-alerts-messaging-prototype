@@ -11,7 +11,7 @@ module.exports = function (env) {
   var filters = {}
 
   filters.formatIsoDate = function(isoDate) {
-    return dateFns.format(new Date(isoDate), 'Pp')
+    return isoDate ? dateFns.format(new Date(isoDate), 'Pp') : ''
   }
   /* ------------------------------------------------------------------
     add your methods to the filters obj below this comment block:
