@@ -3,11 +3,6 @@
 {% block content %}
 
 <div class="govuk-grid-row">
-	<div class="govuk-grid-column-one-half-from-desktop">
-
-	</div>
-</div>
-<div class="govuk-grid-row">
 	<div class="govuk-grid-column">
 		<h1 class="govuk-heading-xl">
 			Draft - {{draftTravelAdvice.title}}
@@ -30,40 +25,67 @@
 				</li>
 			</ul>
 			<div class="govuk-tabs__panel" id="sections">
-		<div class="govuk-accordion" data-module="govuk-accordion" id="accordion-default">
-			<div class="govuk-accordion__section ">
-				<div class="govuk-accordion__section-header">
-					<h2 class="govuk-accordion__section-heading">
+				{% if reviewer %}
+					<p>Review requested from {{reviewer}}</p>
+
+					<button type="submit" class="govuk-button" data-module="govuk-button">
+						Approve
+					</button>
+				{% endif %}
+					<div class="govuk-accordion" data-module="govuk-accordion" id="accordion-default">
+						<div class="govuk-accordion__section ">
+							<div class="govuk-accordion__section-header">
+								<h2 class="govuk-accordion__section-heading">
 							<span class="govuk-accordion__section-button" id="accordion-default-heading-2">
 							  Summary
 							</span>
-					</h2>
-				</div>
-				<div id="accordion-default-content-2" class="govuk-accordion__section-content"
-					 aria-labelledby="accordion-default-heading-2">
+								</h2>
+							</div>
+							<div id="accordion-default-content-2" class="govuk-accordion__section-content"
+								 aria-labelledby="accordion-default-heading-2">
 					<textarea class="govuk-textarea" name="summary" rows="20">
 						{{draftTravelAdvice.details.summary}}
 					</textarea>
-				</div>
-			</div>
-			{% for section in draftTravelAdvice.details.parts %}
-			<div class="govuk-accordion__section ">
-				<div class="govuk-accordion__section-header">
-					<h2 class="govuk-accordion__section-heading">
+							</div>
+						</div>
+						{% for section in draftTravelAdvice.details.parts %}
+						<div class="govuk-accordion__section ">
+							<div class="govuk-accordion__section-header">
+								<h2 class="govuk-accordion__section-heading">
 							<span class="govuk-accordion__section-button" id="accordion-default-heading-2">
 							  {{section.title}}
 							</span>
-					</h2>
-				</div>
-				<div id="accordion-default-content-2" class="govuk-accordion__section-content"
-					 aria-labelledby="accordion-default-heading-2">
+								</h2>
+							</div>
+							<div id="accordion-default-content-2" class="govuk-accordion__section-content"
+								 aria-labelledby="accordion-default-heading-2">
 					<textarea class="govuk-textarea" name="{{section.slug}}" rows="20">
 						{{section.body}}
 					</textarea>
-				</div>
-			</div>
-			{% endfor %}
-		</div>
+							</div>
+						</div>
+						{% endfor %}
+					</div>
+				{% if reviewer %}
+				{% else %}
+				<form method="post" action="draft-travel-advice-send-to-reviewer">
+					<div class="govuk-form-group">
+						<label class="govuk-label" for="draftReviewEmailAddress">
+							Email address of a reviewer
+						</label>
+						<div id="telephone-number-hint" class="govuk-hint">
+							They'll be emailed a link to this page
+						</div>
+						<input class="govuk-input govuk-!-width-one-third" id="draftReviewEmailAddress"
+							   name="emailAddress"
+							   type="email" spellcheck="false" value="">
+					</div>
+
+					<button type="submit" class="govuk-button" data-module="govuk-button">
+						Send for review
+					</button>
+				</form>
+				{% endif %}
 			</div>
 			<div class="govuk-tabs__panel" id="versions">
 				{% for version in draftTravelAdvice.details.change_history %}
@@ -72,20 +94,21 @@
 				<hr />
 				{% endfor %}
 			</div>
+		</div>
+
 	</div>
-</div>
-<link rel="stylesheet" href="/public/javascripts/accessible-autocomplete.min.css" />
-<script type="text/javascript" src="/public/javascripts/accessible-autocomplete.min.js"></script>
-<script>
-  accessibleAutocomplete.enhanceSelectElement({
-    defaultValue: '',
-    selectElement: document.querySelector('#travelAdviceDraftCountry'),
-    showAllValues: true,
-    displayMenu: 'overlay'
-  })
-  document.querySelector('.autocomplete__dropdown-arrow-down').addEventListener('click', function () {
-    document.querySelector('#countryToAdd').click()
-    document.querySelector('#countryToAdd').focus()
-  })
-</script>
-{% endblock %}
+	<link rel="stylesheet" href="/public/javascripts/accessible-autocomplete.min.css" />
+	<script type="text/javascript" src="/public/javascripts/accessible-autocomplete.min.js"></script>
+	<script>
+      accessibleAutocomplete.enhanceSelectElement({
+        defaultValue: '',
+        selectElement: document.querySelector('#travelAdviceDraftCountry'),
+        showAllValues: true,
+        displayMenu: 'overlay'
+      })
+      document.querySelector('.autocomplete__dropdown-arrow-down').addEventListener('click', function () {
+        document.querySelector('#countryToAdd').click()
+        document.querySelector('#countryToAdd').focus()
+      })
+	</script>
+	{% endblock %}

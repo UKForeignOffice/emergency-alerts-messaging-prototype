@@ -1,9 +1,31 @@
 const fetch = require('node-fetch')
+const notify = require('./notify')
+const getTemplates = require('./message-templates')
+const constants = require('./constants')
 
 module.exports = {
+  draftTravelAdvicePageSendToReviewer: async (req, res, next) => {
+    const templates = getTemplates({ channel: constants.CHANNELS.EMAIL })
+    const { emailAddress, travelAdviceDraftCountry } = req.session.data
+    const { subject, body } = templates.REVIEW_TRAVEL_ADVICE_DRAFT({ country: travelAdviceDraftCountry, reviewer: emailAddress })
+    await notify.sendEmail(
+      constants.NOTIFY_TEMPLATE_ID_EMAIL,
+      emailAddress,
+      {
+        personalisation: {
+          subject,
+          body
+        }
+      }
+    )
+    res.redirect(`/draft-travel-advice?travelAdviceDraftCountry=${travelAdviceDraftCountry}`)
+  },
   draftTravelAdvicePage: async (req, res, next) => {
-    const { travelAdviceDraftCountry } = req.query
+    const { travelAdviceDraftCountry, reviewer } = req.query
     res.locals.draftTravelAdvice = null
+    if (reviewer) {
+      res.locals.reviewer = reviewer
+    }
     if (!travelAdviceDraftCountry) {
       next()
     }

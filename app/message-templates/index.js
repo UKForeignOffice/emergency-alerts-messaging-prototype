@@ -11,7 +11,8 @@ const MESSAGE_TEMPLATES = {
 }
 
 const EMAIL_TEMPLATES = {
-  VERIFY_EMAIL_ADDRESS: require('./email/verify-email-address')
+  VERIFY_EMAIL_ADDRESS: require('./email/verify-email-address'),
+  REVIEW_TRAVEL_ADVICE_DRAFT: require('./email/draft-travel-advice-review')
 }
 
 module.exports = ({ channel }) => {
