@@ -7,8 +7,7 @@ const sms = require('./sms')
 const { alertHistory } = require('./alert-history')
 const { addSubscription, getSubscriptions } = require('./subscriptions')
 const confirmSenderId = require('./confirm-sender-id')
-
-router.get('/alert-history', alertHistory)
+const { draftTravelAdvicePage } = require('./draft-travel-advice')
 
 router.post('/broadcast-alert', broadcastAlert)
 
@@ -26,9 +25,10 @@ router.get('/subscriptions', getSubscriptions)
 
 router.post('/confirm-sender-id', confirmSenderId)
 
-// HTML pages
-
 router.use(require('../lib/middleware/authentication/authentication.js'))
+
+router.get('/draft-travel-advice', draftTravelAdvicePage)
+router.get('/alert-history', alertHistory)
 
 // reset all session data if user hits index page
 router.get('/', (req, res, next) => {
