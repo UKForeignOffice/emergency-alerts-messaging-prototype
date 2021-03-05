@@ -1,7 +1,7 @@
 const Vonage = require('@vonage/server-sdk')
 const constants = require('./constants');
 const { updateConversation } = require('./store')
-const { sendNotifySms } = require('./sms')
+const { slugify } = require('./utils')
 
 const vonage = new Vonage({
   apiKey: process.env.VONAGE_API_KEY,
@@ -38,25 +38,18 @@ const sendMessage = ({ senderId, message, channel }) => {
   });
 }
 
-const messageReceived = (req, res) => {
+const messageReceived = async (req, res) => {
   const { number, type } = req.body.from
   const { text } = req.body.message.content
   const channel = type === 'whatsapp' ? constants.CHANNELS.WHATSAPP : constants.CHANNELS.VIBER
-  let data = updateConversation({ phoneNumber: number, userMessage: text, channel })
+  const data = updateConversation({ phoneNumber: number, userMessage: text, channel })
   if (data.lastCountryRequested) {
     data.countryUrlSlug = slugify(data.lastCountryRequested)
   }
-  const { lastTemplateSent, ...rest } = data
+  const { lastTemplateSent, renderedTemplate } = data
   if (lastTemplateSent) {
-    console.log(`${channel} message sent to ***${number.slice(-3)}`)
-    vonage.sendMessage({ number, message: lastTemplateSent(rest), channel })
-  }
-  const lowerCase = text.trim().toLowerCase()
-  const smsSubscribeRequest = lowerCase.startsWith('sms ')
-  if (smsSubscribeRequest) {
-    const userMessage = lowerCase.replace('sms ', 'subscribe ')
-    data = updateConversation({ phoneNumber: number, userMessage, channel: constants.CHANNELS.SMS })
-    sendNotifySms({ data, phoneNumber: number })
+    console.log(`${channel} template "${lastTemplateSent}" sent to ***${number.slice(-3)}`)
+    await sendMessage({ senderId: number, message: renderedTemplate, channel })
   }
   res.sendStatus(200)
 };

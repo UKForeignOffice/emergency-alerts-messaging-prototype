@@ -14,7 +14,7 @@ const sendNotifySms = async ({ data, phoneNumber }) => {
       }
     }
   )
-  console.log(`Notify SMS sent to ***${phoneNumber.slice(-3)} with template ${data.lastTemplateSent}`)
+  console.log(`SMS template "${data.lastTemplateSent}" sent to ***${phoneNumber.slice(-3)}`)
 }
 
 const messageReceived = async (req, res) => {
