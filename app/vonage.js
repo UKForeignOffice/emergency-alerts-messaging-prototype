@@ -1,7 +1,7 @@
 const Vonage = require('@vonage/server-sdk')
 const constants = require('./constants');
 const { updateConversation } = require('./store')
-const { slugify } = require('./utils')
+const { slugify, prefixPhoneNumber } = require('./utils')
 
 const vonage = new Vonage({
   apiKey: process.env.VONAGE_API_KEY,
@@ -18,7 +18,7 @@ const sendMessage = ({ senderId, message, channel }) => {
     { type: "viber_service_msg", id: process.env.VIBER_SERVICE_MESSAGE_ID };
   return new Promise((resolve, reject) => {
     vonage.channel.send(
-      { type, number: senderId },
+      { type, number: prefixPhoneNumber(senderId) },
       secondParam,
       {
         "content": {
@@ -26,7 +26,7 @@ const sendMessage = ({ senderId, message, channel }) => {
           "text": message
         }
       },
-      (err, data) => {
+      err => {
         if (err) {
           console.error(err);
           reject(err)

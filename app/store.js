@@ -2,7 +2,7 @@ const recognisedCountryList = require('./data/countries.json');
 const recognisedCountryNames = Object.values(recognisedCountryList).map(recognisedCountry => recognisedCountry.item[0].name).sort();
 const getTemplates = require('./message-templates');
 const constants = require('./constants');
-const { slugify } = require('./utils');
+const { slugify, prefixPhoneNumber } = require('./utils');
 
 const map = {
   EMAIL: {},
@@ -22,29 +22,30 @@ const matchCountryName = str =>
   recognisedCountryNames.find(recognisedCountry => recognisedCountry.toLowerCase() === str);
 
 const updateData = ({ phoneNumber, userMessage, channel }) => {
-  if (!map[channel][phoneNumber]) {
-    map[channel][phoneNumber] = { ...blankData, countries: [] };
+  const number = prefixPhoneNumber(phoneNumber)
+  if (!map[channel][number]) {
+    map[channel][number] = { ...blankData, countries: [] };
   }
   const message = userMessage.trim().toLowerCase();
 
-  if (message === 'yes' && map[channel][phoneNumber].isBritishNational === null && map[channel][phoneNumber].lastTemplateSent === 'CONFIRM_BRITISH_NATIONAL' && map[channel][phoneNumber].lastCountryRequested) {
-    if (!map[channel][phoneNumber].countries.includes(map[channel][phoneNumber].lastCountryRequested)) {
-      map[channel][phoneNumber].countries.push(map[channel][phoneNumber].lastCountryRequested);
+  if (message === 'yes' && map[channel][number].isBritishNational === null && map[channel][number].lastTemplateSent === 'CONFIRM_BRITISH_NATIONAL' && map[channel][number].lastCountryRequested) {
+    if (!map[channel][number].countries.includes(map[channel][number].lastCountryRequested)) {
+      map[channel][number].countries.push(map[channel][number].lastCountryRequested);
     }
-    map[channel][phoneNumber].isBritishNational = true;
-    map[channel][phoneNumber].lastTemplateSent = 'CONFIRM_SUBSCRIBED';
+    map[channel][number].isBritishNational = true;
+    map[channel][number].lastTemplateSent = 'CONFIRM_SUBSCRIBED';
     return;
   }
 
-  if (message === 'no' && map[channel][phoneNumber].isBritishNational === null && map[channel][phoneNumber].lastTemplateSent === 'CONFIRM_BRITISH_NATIONAL') {
-    map[channel][phoneNumber].isBritishNational = false;
-    map[channel][phoneNumber].lastTemplateSent = 'DENIED_NON_BRITISH_NATIONAL';
+  if (message === 'no' && map[channel][number].isBritishNational === null && map[channel][number].lastTemplateSent === 'CONFIRM_BRITISH_NATIONAL') {
+    map[channel][number].isBritishNational = false;
+    map[channel][number].lastTemplateSent = 'DENIED_NON_BRITISH_NATIONAL';
     return;
   }
 
   // list all subscribed countries
   if (message === 'subscribe list') {
-    map[channel][phoneNumber].lastTemplateSent = 'LIST_SUBSCRIBED_COUNTRIES';
+    map[channel][number].lastTemplateSent = 'LIST_SUBSCRIBED_COUNTRIES';
     return;
   }
   const subscribeRequest = message.startsWith('subscribe ');
@@ -59,35 +60,35 @@ const updateData = ({ phoneNumber, userMessage, channel }) => {
     }
     const recognisedCountry = matchCountryName(requestedCountryName);
     if (recognisedCountry) {
-      map[channel][phoneNumber].lastCountryRequested = recognisedCountry;
+      map[channel][number].lastCountryRequested = recognisedCountry;
       if (unsubscribeRequest) {
-        map[channel][phoneNumber].countries = map[channel][phoneNumber].countries.filter(country => country !== recognisedCountry);
-        map[channel][phoneNumber].lastTemplateSent = 'CONFIRM_UNSUBSCRIBED';
+        map[channel][number].countries = map[channel][number].countries.filter(country => country !== recognisedCountry);
+        map[channel][number].lastTemplateSent = 'CONFIRM_UNSUBSCRIBED';
         return;
       }
       // subscribe
       if (subscribeRequest) {
-        if (map[channel][phoneNumber].isBritishNational === true) {
-          if (!map[channel][phoneNumber].countries.includes(recognisedCountry)) {
-            map[channel][phoneNumber].countries.push(recognisedCountry);
+        if (map[channel][number].isBritishNational === true) {
+          if (!map[channel][number].countries.includes(recognisedCountry)) {
+            map[channel][number].countries.push(recognisedCountry);
           }
-          map[channel][phoneNumber].lastTemplateSent = 'CONFIRM_SUBSCRIBED';
-        } else if (map[channel][phoneNumber].isBritishNational === null) {
-          map[channel][phoneNumber].lastTemplateSent = 'CONFIRM_BRITISH_NATIONAL';
+          map[channel][number].lastTemplateSent = 'CONFIRM_SUBSCRIBED';
+        } else if (map[channel][number].isBritishNational === null) {
+          map[channel][number].lastTemplateSent = 'CONFIRM_BRITISH_NATIONAL';
         } else {
-          map[channel][phoneNumber].lastTemplateSent = 'DENIED_NON_BRITISH_NATIONAL';
+          map[channel][number].lastTemplateSent = 'DENIED_NON_BRITISH_NATIONAL';
         }
       }
       return;
     }
 
     // unrecognised country
-    map[channel][phoneNumber].lastCountryRequested = requestedCountryName;
-    map[channel][phoneNumber].lastTemplateSent = 'COUNTRY_NOT_RECOGNISED';
+    map[channel][number].lastCountryRequested = requestedCountryName;
+    map[channel][number].lastTemplateSent = 'COUNTRY_NOT_RECOGNISED';
     return;
   }
 
-  map[channel][phoneNumber].lastTemplateSent = null;
+  map[channel][number].lastTemplateSent = null;
 }
 module.exports = {
   instantSubscribe: ({ senderId, countries, channel }) => {
