@@ -21,10 +21,11 @@ const fullCountryList = require('./countries.json');
 
 const countryNames = Object.values(fullCountryList).map(country => country.item[0].name).sort();
 
-const incident = require('./alerts-myanmar')
+const Myanmar = require('./alerts-myanmar')
+const Kenya = require('./alerts-kenya')
 
 module.exports = {
   countryNames,
-  incident,
+  incidents: { Myanmar, Kenya },
   sort: 'asc'
 }

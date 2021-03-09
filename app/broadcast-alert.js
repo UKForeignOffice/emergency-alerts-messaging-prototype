@@ -10,8 +10,10 @@ const { sendTweet } = require('./twitter')
 module.exports = async (req, res) => {
   const { country, messageHeading, messageEmail, messageSms, messageWhatsApp, messageTwitter1, messageTwitter2, messageTwitter3 } = req.body
   const subscribers = getSubscribersForCountry({ country })
-
-  req.session.data.incident.alerts.push({
+  if (!req.session.data.incidents[country]) {
+    return res.redirect('/')
+  }
+  req.session.data.incidents[country].alerts.push({
     date: (new Date()).toISOString(),
     title: messageHeading,
     email: messageEmail,
@@ -33,7 +35,7 @@ module.exports = async (req, res) => {
       }
       if (channel === constants.CHANNELS.EMAIL) {
         const countryUrlSlug = slugify(country);
-        const email = makeEmailAlert({ countryUrlSlug, body: messageEmail, messageHeading })
+        const email = makeEmailAlert({ email: senderId, country, countryUrlSlug, body: messageEmail, messageHeading })
         return notify.sendEmail(
           NOTIFY_TEMPLATE_ID_EMAIL,
           senderId,

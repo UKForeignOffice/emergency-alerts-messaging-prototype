@@ -2,7 +2,7 @@
 
 
 {% block beforeContent %}
-<a class="govuk-back-link" href="https://fcdo-alerts-prototype.herokuapp.com/">Travel advice - Myanmar</a>
+<a class="govuk-back-link" href="https://fcdo-alerts-prototype.herokuapp.com/">Travel advice</a>
 {% endblock %}
 
 {% block content %}
@@ -14,14 +14,15 @@
 		<span class="govuk-caption-xl">
 Foreign travel advice
 		</span>
-				Myanmar {{data['incident']['title']}}
+				{{incident.country}} {{incident['title']}}
 				<span class="govuk-caption-m">
-		  Ongoing since {{data['incident']['startDate']}}
+		  Ongoing since {{incident['startDate']}}
 		</span>
 			</h1>
 		<p>You can <a href="https://fcdo-alerts-prototype.herokuapp.com/add_country?countryToAdd=Myanmar">sign up</a> to receive these alerts by email and SMS.</p>
 		<br />
 		<form class="form" method="get" action="alert-history">
+			<input type="hidden" name="country" value="{{data.country}}" />
 			<div class="govuk-form-group">
 				<select class="govuk-select" name="sort">
 					<option value="desc"{% if data.sort == 'desc' %} selected{% endif %}>Sort by newest first</option>
@@ -33,10 +34,10 @@ Foreign travel advice
 		</form>
 
 			<ol class="timeline">
-				{% for alert in data['incident']['alerts'] %}
+				{% for alert in incident['alerts'] %}
 				<li class="timeline-event">
 					<h3 class="timeline-event-title">{{alert.title}}</h3>
-					<span class="timeline-event-meta">Sent: {{alert.dateShort}}</span>
+					<span class="timeline-event-meta">Sent: {{alert.date | formatIsoDate}}</span>
 					<div class="timeline-event-content">
 <!--						<details class="govuk-details" data-module="govuk-details" open>-->
 <!--							<summary class="govuk-details__summary">-->

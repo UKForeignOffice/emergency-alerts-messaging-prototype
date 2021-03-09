@@ -1,4 +1,5 @@
 module.exports = {
+  country: 'Myanmar',
   title: 'military coup',
   startDate: '1st Feb 2021',
   alerts: [
