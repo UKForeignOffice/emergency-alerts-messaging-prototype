@@ -63,6 +63,7 @@ module.exports = async (req, res) => {
       req.session.data['succeeded'].push(subscribers[idx]);
     } else {
       req.session.data['failed'].push(subscribers[idx]);
+      console.error(result.reason.message)
     }
   })
   res.redirect('/broadcast-confirmation')
