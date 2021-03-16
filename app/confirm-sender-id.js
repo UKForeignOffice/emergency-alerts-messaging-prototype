@@ -54,6 +54,7 @@ module.exports = async (req, res) => {
       instantSubscribe({ senderId, countries, channel })
     }
   } catch (err) {
+    console.error(err)
     return res.sendStatus(500)
   }
   res.sendStatus(200)
