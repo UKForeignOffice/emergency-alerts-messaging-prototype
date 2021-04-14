@@ -1,0 +1,139 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<div class="govuk-grid-row">
+	<div class="govuk-grid-column-two-thirds">
+		<h1 class="govuk-heading-xl">
+			Send a travel alert for Kenya
+		</h1>
+		<p>Each user will be alerted via the channel(s) they subscribed on (email / SMS).</p>
+		<br />
+		<h2 class="govuk-heading-m">
+			Message 1
+		</h2>
+		<form class="form" method="post" action="broadcast-alert">
+			<div class="govuk-form-group">
+				<input type="hidden" name="country" value="Kenya">
+			</div>
+			<div class="govuk-form-group">
+				<label class="govuk-label" for="heading">
+					Message heading
+				</label>
+				<input class="govuk-input" id="heading" name="messageHeading" value="Security incident in the Riverside area of Nairobi" />
+			</div>
+			<div class="govuk-accordion" data-module="govuk-accordion" id="accordion-default">
+				<div class="govuk-accordion__section ">
+					<div class="govuk-accordion__section-header">
+						<h2 class="govuk-accordion__section-heading">
+							<span class="govuk-accordion__section-button" id="accordion-default-heading-2">
+							  Email
+							</span>
+						</h2>
+					</div>
+					<div id="accordion-default-content-2" class="govuk-accordion__section-content"
+						 aria-labelledby="accordion-default-heading-2">
+
+							<textarea class="govuk-textarea" id="email-body" name="messageEmail" rows="25"
+									  aria-describedby="more-detail-hint">There are reports of an incident in the Riverside area of Nairobi.
+
+If you’re able to do so safely, consider leaving the area. If you're caught up in the incident, turn any mobile phones or other devices to silent and do not put your location on social media. Remain vigilant and follow the advice of local security authorities if they are present.
+							</textarea>
+
+					</div>
+				</div>
+				<div class="govuk-accordion__section ">
+					<div class="govuk-accordion__section-header">
+						<h2 class="govuk-accordion__section-heading">
+							<span class="govuk-accordion__section-button" id="accordion-default-heading-1">
+							  SMS
+							</span>
+						</h2>
+					</div>
+					<div id="accordion-default-content-1" class="govuk-accordion__section-content"
+						 aria-labelledby="accordion-default-heading-1">
+						<div id="more-detail-hint" class="govuk-hint">
+							Note - the SMS message must be 918 characters or less
+						</div>
+						<textarea class="govuk-textarea" name="messageSms" rows="25"
+								  aria-describedby="more-detail-hint">There are reports of an incident in the Riverside area of Nairobi.
+
+If you’re able to do so safely, consider leaving the area. If you're caught up in the incident, turn any mobile phones or other devices to silent and do not put your location on social media. Remain vigilant and follow the advice of local security authorities if they are present.
+						</textarea>
+
+					</div>
+				</div>
+			</div>
+			<button class="govuk-button" data-module="govuk-button">Publish</button>
+		</form>
+		<hr />
+		<h2 class="govuk-heading-m">
+			Message 2
+		</h2>
+		<form class="form" method="post" action="broadcast-alert">
+			<div class="govuk-form-group">
+				<input type="hidden" name="country" value="Kenya">
+			</div>
+			<div class="govuk-form-group">
+				<label class="govuk-label" for="heading">
+					Message heading
+				</label>
+				<input class="govuk-input" id="heading" name="messageHeading" value="Ongoing security incident" />
+			</div>
+			<div class="govuk-accordion" data-module="govuk-accordion" id="accordion-default">
+				<div class="govuk-accordion__section ">
+					<div class="govuk-accordion__section-header">
+						<h2 class="govuk-accordion__section-heading">
+							<span class="govuk-accordion__section-button" id="accordion-default-heading-2">
+							  Email
+							</span>
+						</h2>
+					</div>
+					<div id="accordion-default-content-2" class="govuk-accordion__section-content"
+						 aria-labelledby="accordion-default-heading-2">
+
+							<textarea class="govuk-textarea" id="email-body" name="messageEmail" rows="25"
+									  aria-describedby="more-detail-hint">There is an ongoing security incident in the Riverside area of Nairobi; Kenyan authorities are conducting an operation in response to the incident.
+
+    If you’re caught up in the incident, turn any mobile phones or other devices to silent and do not put your location on social media. If you’re able to do so safely, leave the area and contact your friends and family to let them know you are safe. Remain vigilant and follow the advice and instructions of local authorities.
+
+    The British High Commission Nairobi will be closed for routine business on Wednesday 16 January while we respond to the incident.
+
+    If you’ve been directly affected by this incident, and it is safe to do so, you can contact the British High Commission on +254 (0)20 287 3000.
+
+    If you’re in the UK and worried about a British national in Kenya, call the FCO in London on 020 7008 1500.
+							</textarea>
+
+					</div>
+				</div>
+				<div class="govuk-accordion__section ">
+					<div class="govuk-accordion__section-header">
+						<h2 class="govuk-accordion__section-heading">
+							<span class="govuk-accordion__section-button" id="accordion-default-heading-1">
+							  SMS
+							</span>
+						</h2>
+					</div>
+					<div id="accordion-default-content-1" class="govuk-accordion__section-content"
+						 aria-labelledby="accordion-default-heading-1">
+						<div id="more-detail-hint" class="govuk-hint">
+							Note - the SMS message must be 918 characters or less
+						</div>
+						<textarea class="govuk-textarea" name="messageSms" rows="25"
+								  aria-describedby="more-detail-hint">There is an ongoing security incident in the Riverside area of Nairobi; Kenyan authorities are conducting an operation in response to the incident.
+
+    If you’re caught up in the incident, turn any mobile phones or other devices to silent and do not put your location on social media. If you’re able to do so safely, leave the area and contact your friends and family to let them know you are safe. Remain vigilant and follow the advice and instructions of local authorities.
+
+    The British High Commission Nairobi will be closed on Wednesday 16 January while we respond but can be contacted on +254 (0)20 287 3000.
+
+    If you’re in the UK and worried about a British national in Kenya, call the FCO in London on 020 7008 1500.
+						</textarea>
+
+					</div>
+				</div>
+			</div>
+			<button class="govuk-button" data-module="govuk-button">Publish</button>
+		</form>
+	</div>
+</div>
+{% endblock %}

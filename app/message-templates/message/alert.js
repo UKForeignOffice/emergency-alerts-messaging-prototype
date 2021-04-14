@@ -5,5 +5,7 @@ ${title}
 
 ${body}
 
-^ To unsubscribe, reply to this SMS with UNSUBSCRIBE ${country}
+All alerts for ${country}: https://fcdo-sms-subscriber.herokuapp.com/alert-history?country=${country}&sort=desc
+
+^ To unsubscribe, go to ${process.env.SUBSCRIBE_APP_HOST}/unsubscribe}
 `;
