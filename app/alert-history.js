@@ -1,8 +1,9 @@
 
+const { incidents } = require('./data/session-data-defaults')
+
 module.exports = {
   alertHistory: (req, res, next) => {
     const {country} = req.query
-    const { incidents } = req.session.data
     if (incidents[country]) {
       res.locals.incident = {
         ...incidents[country],

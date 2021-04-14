@@ -6,14 +6,15 @@ const { slugify } = require('./utils');
 const vonage = require('./vonage')
 const { NOTIFY_TEMPLATE_ID_EMAIL, NOTIFY_TEMPLATE_ID_SMS } = require('./constants')
 const { sendTweet } = require('./twitter')
+const { incidents } = require('./data/session-data-defaults')
 
 module.exports = async (req, res) => {
   const { country, messageHeading, messageEmail, messageSms, messageWhatsApp, messageTwitter1, messageTwitter2, messageTwitter3 } = req.body
   const subscribers = getSubscribersForCountry({ country })
-  if (!req.session.data.incidents[country]) {
+  if (!incidents[country]) {
     return res.redirect('/')
   }
-  req.session.data.incidents[country].alerts.push({
+  incidents[country].alerts.push({
     date: (new Date()).toISOString(),
     title: messageHeading,
     email: messageEmail,

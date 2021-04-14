@@ -4,7 +4,6 @@ module.exports = ({ email, country, countryUrlSlug, messageHeading, body }) => `
 
 ${body}
 
-
 To view all alerts sent for ${country}, please visit ${process.env.SEND_ALERT_APP_HOST}/alert-history?country=${country}&sort=desc
 
 The British Embassy is following the situation carefully and will continue to update the Travel Advice - https://www.gov.uk/foreign-travel-advice/${countryUrlSlug} 
