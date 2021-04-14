@@ -7,6 +7,7 @@ const sms = require('./sms')
 const { alertHistory } = require('./alert-history')
 const { addSubscription, getSubscriptions } = require('./subscriptions')
 const confirmSenderId = require('./confirm-sender-id')
+const onboardExistingSubscriber = require('./onboard-existing-subscriber')
 const { draftTravelAdvicePage, draftTravelAdvicePageSendToReviewer } = require('./draft-travel-advice')
 
 router.post('/broadcast-alert', broadcastAlert)
@@ -24,6 +25,8 @@ router.post('/subscriptions', addSubscription)
 router.get('/subscriptions', getSubscriptions)
 
 router.post('/confirm-sender-id', confirmSenderId)
+
+router.post('/onboard-existing-subscriber', onboardExistingSubscriber)
 
 router.use(require('../lib/middleware/authentication/authentication.js'))
 
