@@ -14,7 +14,7 @@ Note - subscriber details are stored in memory, and are wiped every time the app
 To run:
 `npm start`
 
-The app / service will run locally on http://localhost:3000
+The app / service will run locally on http://localhost:3001
 
 ## Using the API locally
 
@@ -26,9 +26,9 @@ Load `./postman_collection.json` into Postman, to send requests to localhost.
 Change the request body to subscribe, confirm British nationality etc.
 
 ## Sending an alert
-Use the page at http://localhost:3000 or https://fcdo-sms-subscriber.herokuapp.com to broadcast an alert to all subscribers for the country you specify.
+Use the page at http://localhost:3001 or https://fcdo-sms-subscriber.herokuapp.com to broadcast an alert to all subscribers for the country you specify.
 
-## Deployed app / service
+## Deployed service
 
 https://fcdo-sms-subscriber.herokuapp.com/
 
