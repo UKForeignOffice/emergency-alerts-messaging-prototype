@@ -21,21 +21,22 @@ module.exports = async (req, res) => {
     sms: messageSms
   })
 
+  const countryUrlSlug = slugify(country);
   const results = await Promise.allSettled(
     subscribers.map(({ senderId, channel }) => {
       if (channel === constants.CHANNELS.SMS) {
+        const body = makeEmailAlert({ email: senderId, country, countryUrlSlug, body: messageEmail, messageHeading })
         return notify.sendSms(
           NOTIFY_TEMPLATE_ID_SMS,
           senderId,
           {
             personalisation: {
-              body: messageSms
+              body
             }
           }
         )
       }
       if (channel === constants.CHANNELS.EMAIL) {
-        const countryUrlSlug = slugify(country);
         const email = makeEmailAlert({ email: senderId, country, countryUrlSlug, body: messageEmail, messageHeading })
         return notify.sendEmail(
           NOTIFY_TEMPLATE_ID_EMAIL,

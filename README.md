@@ -8,8 +8,9 @@ Note - subscriber details are stored in memory, and are wiped every time the app
 
 ## Getting started
 
-1. Copy all variables from https://dashboard.heroku.com/apps/fcdo-sms-subscriber/settings to a .env file in the root of this repo.
-2. `npm i`
+1. Take a copy of the .env-example file in the repo root, and name it .env
+2. Using the Caution Your Blast Heroku team account, copy all variables from https://dashboard.heroku.com/apps/fcdo-sms-subscriber/settings to the .env file
+3. `npm i`
 
 To run:
 `npm start`
@@ -35,3 +36,21 @@ https://fcdo-sms-subscriber.herokuapp.com/
 ## Heroku
 
 https://dashboard.heroku.com/apps/fcdo-sms-subscriber
+
+## Notify messaging - email / SMS
+The Notify account name that we used for testing is "FCDO Emergency Alerts DEV".  digital.services@fco.gov.uk is one of the team members.
+[Notify dashboard](https://www.notifications.service.gov.uk/services/22726d26-bf70-459e-b3c6-80cd77095472/api/keys)
+Populate the Notify API key var in .env
+
+## WhatsApp messaging
+A Vonage developer account has been used to send / receive WhatsApp and Viber messages.
+Set up a new developer account at https://developer.nexmo.com/getting-started/overview and populate the following vars in .env:
+VONAGE_API_KEY=
+VONAGE_API_SECRET=
+VONAGE_APPLICATION_ID=
+VONAGE_APPLICATION_PRIVATE_KEY=
+VONAGE_BASE_URL=
+VONAGE_WHATSAPP_NUMBER=
+
+## Dynamics
+An endpoint at /alerts is a spike to save alert data to Dynamics CRM. Populate the .env vars prefixed DYNAMICS_ to authenticate.
