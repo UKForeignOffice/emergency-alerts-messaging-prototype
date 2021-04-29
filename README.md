@@ -24,7 +24,9 @@ Either, run the [subscriber app](https://github.com/UKForeignOffice/travel-alert
 
 ## Pages
 / - broadcast an alert / Tweet
+
 /send-kenya - broadcast an alert (Kenya) - two pre-prepared alerts that can be broadcast in sequence to simulate an incident
+
 /alert-history?country=Myanmar - alert history (also available for Kenya)
 
 ## Using the API locally
@@ -56,19 +58,28 @@ Populate the Notify API key var in .env
 A Vonage developer account has been used to send / receive WhatsApp and Viber messages.
 Set up a new developer account at https://developer.nexmo.com/getting-started/overview and populate the following vars in .env:
 VONAGE_API_KEY=
+
 VONAGE_API_SECRET=
+
 VONAGE_APPLICATION_ID=
+
 VONAGE_APPLICATION_PRIVATE_KEY=
+
 VONAGE_BASE_URL=
+
 VONAGE_WHATSAPP_NUMBER=
 
 ## Twitter
 Spiked sending alert messages to Twitter (from the main send alert page).
 Create a Twitter developer account and populate the following vars in .env:
 TWITTER_API_KEY=
+
 TWITTER_API_SECRET_KEY=
+
 TWITTER_API_BEARER_TOKEN=
+
 TWITTER_ACCESS_TOKEN_KEY=
+
 TWITTER_ACCESS_TOKEN_SECRET=
 
 ## Dynamics
