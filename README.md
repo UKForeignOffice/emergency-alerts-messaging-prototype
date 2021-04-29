@@ -17,6 +17,12 @@ To run:
 
 The app / service will run locally on http://localhost:3001
 
+## Adding subscribers
+Either, run the [subscriber app](https://github.com/UKForeignOffice/travel-alerts-prototype) 
+
+## Pages
+/ - broadcast an alert
+
 ## Using the API locally
 
 To use WhatsApp or Viber, register your phone number by following these [instructions](https://docs.google.com/document/d/1SakVPPP8Yt8fLPSPj4t6j5ucW6ENL6x0/edit#heading=h.du842k3jz8je).
@@ -51,6 +57,15 @@ VONAGE_APPLICATION_ID=
 VONAGE_APPLICATION_PRIVATE_KEY=
 VONAGE_BASE_URL=
 VONAGE_WHATSAPP_NUMBER=
+
+## Twitter
+Spiked sending alert messages to Twitter (from the main send alert page).
+Create a Twitter developer account and populate the following vars in .env:
+TWITTER_API_KEY=
+TWITTER_API_SECRET_KEY=
+TWITTER_API_BEARER_TOKEN=
+TWITTER_ACCESS_TOKEN_KEY=
+TWITTER_ACCESS_TOKEN_SECRET=
 
 ## Dynamics
 An endpoint at /alerts is a spike to save alert data to Dynamics CRM. Populate the .env vars prefixed DYNAMICS_ to authenticate.
