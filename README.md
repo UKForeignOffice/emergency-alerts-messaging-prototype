@@ -2,7 +2,9 @@
 
 https://fcdo-sms-subscriber.herokuapp.com/
 
-A prototype for user testing, which lets users subscribe to emergency alerts. We can then send a test alert to all subscribers for a specified country.
+A prototype for user testing, to send a test alert to all subscribers for a specified country;
+
+See also - subscribe to emergency alerts (using https://github.com/UKForeignOffice/travel-alerts-prototype).
 
 Note - subscriber details are stored in memory, and are wiped every time the app restarts.
 
@@ -18,10 +20,12 @@ To run:
 The app / service will run locally on http://localhost:3001
 
 ## Adding subscribers
-Either, run the [subscriber app](https://github.com/UKForeignOffice/travel-alerts-prototype) 
+Either, run the [subscriber app](https://github.com/UKForeignOffice/travel-alerts-prototype) locally, or use the [Postman collection](./postman_collection.json) to send subscription requests.
 
 ## Pages
-/ - broadcast an alert
+/ - broadcast an alert / Tweet
+/send-kenya - broadcast an alert (Kenya) - two pre-prepared alerts that can be broadcast in sequence to simulate an incident
+/alert-history?country=Myanmar - alert history (also available for Kenya)
 
 ## Using the API locally
 
